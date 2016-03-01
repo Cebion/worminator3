@@ -1,0 +1,25 @@
+Changes in the unix port compared to the official version
+---------------------------------------------------------
+
+Version 3.0R2.1:
+-made worminator compile and run on Linux (Unix)
+-made worminator yield the cpu when its idle
+-save settings in textfile format under $HOME/.worm3.cfg instead
+ of as binary blob in cwd
+-save / load game to / from $HOME/.worm3.sav
+-load datafile from DATADIR as defined during compilation instead of from cwd
+-speedup: don't redraw borders and statuspanel unless nescesarry
+-check all file accesses and give an error and continue when possible instead
+ of just segfaulting
+-fix a crash when changing audio options after loading a savegame of a custom-
+ level or the tutorial
+-fix a crash (unix only?) when changing video options and one similar on exit
+-fix crash on exit caused by a few double free's on exit
+-don't ask for confirmation on load/play_demo/exit when their is no game in
+ progress
+-show a message when trying to save when no game is in progress, instead of
+ just silenty ignoring the request
+-when clicking on another submenu when in one not only close the current one,
+ but also open the new one
+-fix map / savegame / demo read/write routines so that they work on Big Endian
+ archs like PPC too

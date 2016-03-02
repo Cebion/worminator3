@@ -3243,6 +3243,10 @@ void initialize()
 	add_console_line("Loading configuration.");
 	load_config();
 
+	// Set color depth before loading any gfx data
+	set_color_depth(16);
+	set_color_conversion(COLORCONV_NONE);
+
 	// Load data files
 	add_console_line("Loading datafile.");
 	packfile_password("security lockout");
@@ -3292,8 +3296,6 @@ void initialize()
 
 	// Initialize the display
 	add_console_line("Initilizing video");
-	set_color_depth(16);
-	set_color_conversion(COLORCONV_NONE);
 	change_resolution(wormy_config.screen_width, wormy_config.screen_height);
 	set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 	set_display_switch_mode(SWITCH_AMNESIA);

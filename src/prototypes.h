@@ -1,9 +1,9 @@
 /* -- Proto.h --
-Part of the Worminator 2D game engine
-Copyright 2002 by Electroencephlogram Software
-
-This file includes all the function prototypes
-for nearly every unique function in worminator. */
+ * Part of the Worminator 2D game engine
+ * Copyright 2002 by Electroencephlogram Software
+ *
+ * This file includes all the function prototypes
+ * for nearly every unique function in worminator. */
 
 /*************************\
 |** FUNCTION PROTOTYPES **|
@@ -22,36 +22,36 @@ void darken(char always);
 void restore_palette(char always);
 
 /* This function is what accepst all keyboard input from the player during
-   the game.  The function will move the player in addition to polling for
-   input, so the core game loop only needs to call this and render_map()
-   to control the game for the most part.                               */
+ * the game.  The function will move the player in addition to polling for
+ * input, so the core game loop only needs to call this and render_map()
+ * to control the game for the most part.                               */
 void handle_input();
 
 /* This function will render the background layer, the sprites, and the
-   foreground layer on to the double buffer, and then copy the buffer to
-   the screen.  It takes no parameters and returns nothing.             */
+*  foreground layer on to the double buffer, and then copy the buffer to
+*  the screen.  It takes no parameters and returns nothing.             */
 void render_map();
 void show_stats();
 void show_map();
 void update_weather();
 
 /* This function is what allows the worminator to fire his shotgun.  It
-   takes no parameters, because it looks in the player data structure for
-   all the information it needs.                                        */
+*  takes no parameters, because it looks in the player data structure for
+*  all the information it needs.                                        */
 void fire_shotgun();
 int find_laser_sight();
 
 /* This function is what allows the worminator to fire his laser gun.  It
-   takes no parameters, because it looks in the player data structure for
-   all the information it needs.                                        */
+ * takes no parameters, because it looks in the player data structure for
+ * all the information it needs.                                        */
 void fire_laser_gun();
 
 void fire_chainsaw();
 void fire_railgun();
 
 /* This function will load any map file into memory.  It will take care of
-   clearing the player and sprite arrays, so just call it and resume the
-   core game loop and you should be fine.                               */
+ * clearing the player and sprite arrays, so just call it and resume the
+ * core game loop and you should be fine.                               */
 char load_map(char new_level, char *_file_name, char _clear_player);
 
 /* This function will load a saved game off the hard drive              */
@@ -64,9 +64,9 @@ void load_config();
 void save_config();
 
 /* This function will load the background and foreground tilesets, as well
-   as the parallaxing background corresponding to the background tileset
-   into the local cache bitmaps.  The load map function should
-   automatically call this, so you wont normally need to use it at all. */
+ * as the parallaxing background corresponding to the background tileset
+ * into the local cache bitmaps.  The load map function should
+ * automatically call this, so you wont normally need to use it at all. */
 void load_tiles();
 
 void change_game_speed(int speed);
@@ -74,9 +74,9 @@ void change_resolution(int x, int y);
 void reset_sound();
 
 /* This function will install the allegro game library, the keyboard, the
-   mouse, the sound, and create the cache bitmaps and anything else that
-   needs to be done only once at startup.  Call it only once at the start
-   of the game.                                                         */
+ * mouse, the sound, and create the cache bitmaps and anything else that
+ * needs to be done only once at startup.  Call it only once at the start
+ * of the game.                                                         */
 void initialize();
 
 /* This function is used for timeing purposes                           */
@@ -106,41 +106,41 @@ void draw_console(BITMAP *bmp, int position);
 //////////////////////////////////////////////////////////////////////////
 
 /* This function builds a look up table of all animated tiles on the
-   current level.  It is called automatically by the load map function,
-   so you don't normally need to call it.  It will return 0 on success
-   or 1 if there were too many animated tiles in the level.             */
+ * current level.  It is called automatically by the load map function,
+ * so you don't normally need to call it.  It will return 0 on success
+ * or 1 if there were too many animated tiles in the level.             */
 void build_animation_table();
 
 /* This function checks to see if a specified animation is at a give tile
-   or not.                                                              */
+ * or not.                                                              */
 char check_tile_for_animation(short unsigned int tile_x, short unsigned int tile_y, int animation_start, int animation_length, char animation_speed, int number_of_animations);
 
 /* This function is set up as an interrupt by the initialize function.
-   It is called 100 times a second, and will increment all the animation
-   frames for the animated tiles in the look up table build by the build
-   andimation table function.                                           */
+ * It is called 100 times a second, and will increment all the animation
+ * frames for the animated tiles in the look up table build by the build
+ * andimation table function.                                           */
 void update_animations();
 
 //////////////////////////////////////////////////////////////////////////
 // beams.h ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-/* This function will create a beam at x1, y1 heading in a direction or 
-   going to x2, y2.  It can be any two colors and any color mode, but the
-   lifespan of any beam is always 16 updates                            */
+/* This function will create a beam at x1, y1 heading in a direction or
+*  going to x2, y2.  It can be any two colors and any color mode, but the
+*  lifespan of any beam is always 16 updates                            */
 void spawn_beam(int x1, int y, int x2, unsigned char direction, unsigned char color, unsigned char color_mode);
 
 /* This function will return TRUE if there is an empty beam slot avalible,
-   or FALSE if all beam slots are full.                                 */
+ * or FALSE if all beam slots are full.                                 */
 char beam_is_avalible();
 
 /* This function adjusts the lifespan timers on all the beams and will
-   destroy the beam if a beam's timer has expired.  It will also adjust
-   the beam's color if necessecary.                                     */
+ * destroy the beam if a beam's timer has expired.  It will also adjust
+ * the beam's color if necessecary.                                     */
 void update_beams();
 
 /* This function draws all the beams on the double buffer.  It is called
-   by the render_map() function, so there is no need to call it.        */
+ * by the render_map() function, so there is no need to call it.        */
 void render_beams();
 
 //////////////////////////////////////////////////////////////////////////
@@ -154,68 +154,68 @@ int last_weapon();
 int next_weapon();
 
 /* This function attempts to move the player in the direction specified by
-   x_amount and y_amount.  However, it will only consider either the x or
-   y direction at a time, so if you want to move the player diagonallly
-   up and left, call the function twice, using the parameters (0, -1) to 
-   move the player up one pixel, and then (-1, 0) to move the player left
-   one pixel.  The values x_amount and y_amound must be equal to or less
-   than one, except for one special case.  If you call push_player with
-   the parameters (512, -512), then it will check to see if the player can
-   drop down one pixel, which can happen only when the player is standing
-   on at least one solid from top info tile.                            */
+ * x_amount and y_amount.  However, it will only consider either the x or
+ * y direction at a time, so if you want to move the player diagonallly
+ * up and left, call the function twice, using the parameters (0, -1) to
+ * move the player up one pixel, and then (-1, 0) to move the player left
+ * one pixel.  The values x_amount and y_amound must be equal to or less
+ * than one, except for one special case.  If you call push_player with
+ * the parameters (512, -512), then it will check to see if the player can
+ * drop down one pixel, which can happen only when the player is standing
+ * on at least one solid from top info tile.                            */
 void push_player(float x_amount, float y_amount);
 
 /* This function will check to see if the player has touched a special
-   info tile, such as painful info tiles or ammo info tiles.  If so, it
-   will take appropriate action.  This function is automatically called
-   by the push player function, so you probally won't need to call it
-   yourself.                                                            */
+ * info tile, such as painful info tiles or ammo info tiles.  If so, it
+ * will take appropriate action.  This function is automatically called
+ * by the push player function, so you probally won't need to call it
+ * yourself.                                                            */
 void player_touched(int x_tile_location, int y_tile_location);
 
 void control_player();
 void trigger_switch();
 
 /* This function will assign the player.frame attribute to an appropriate
-   value, based on what the player is doing at the time.                */
+ * value, based on what the player is doing at the time.                */
 void pick_player_frame();
 
 /* This function will actually do the rendering of the worminator.  You
-   should make sure that pick_player_frame() has been called before you
-   call this function to make sure that the correct frame will be drawn */
+*  should make sure that pick_player_frame() has been called before you
+*  call this function to make sure that the correct frame will be drawn */
 void draw_player();
 
 /* This function will check to see if the player is touching any one of
-   the teleporter info tiles, and if so, will move the player to the 
-   other corresponding teleport info tile.  This function is called when
-   ever the up key is pressed, so you probally won't need to call it.   */
+*  the teleporter info tiles, and if so, will move the player to the
+*  other corresponding teleport info tile.  This function is called when
+*  ever the up key is pressed, so you probally won't need to call it.   */
 char check_player_teleport();
 
 /* This function will reset the player data structure to the default
-   values.  This function is automatically called by the load level
-   function, so you won't normally need to call it.                     */
+ * values.  This function is automatically called by the load level
+ * function, so you won't normally need to call it.                     */
 void clear_player();
 
 /* This function refreshes the display panel to reflect new values for
-   ammo, score, keys, etc...  You should call it every time any of these
-   values change.  However, don't call it if only the Worminator's health
-   has changed, as calling the function hurt_player with a parameter of 0
-   will refresh the health bar display.                                 */
+ * ammo, score, keys, etc...  You should call it every time any of these
+ * values change.  However, don't call it if only the Worminator's health
+ * has changed, as calling the function hurt_player with a parameter of 0
+ * will refresh the health bar display.                                 */
 void update_player_stats();
 
 /* This function will add or subtract health from the worminator.  If you
-   call it with a positive parameter, it will add health, which is useful
-   if you want to add health packs or other items that heal the
-   Worminator.  Calling the function with a negative value will hurt the
-   Worminator, which is used when enemies attack the Worminator, and when
-   The worminator hits painful or lethal info tiles.  Calling this
-   function with a parameter of 0 will simply refresh the health bar
-   display.  Call it with a parameter of -10 to kill the worminator or
-   call it with a parameter of 10 to fully heal the Worminator.         */
+ * call it with a positive parameter, it will add health, which is useful
+ * if you want to add health packs or other items that heal the
+ * Worminator.  Calling the function with a negative value will hurt the
+ * Worminator, which is used when enemies attack the Worminator, and when
+ * The worminator hits painful or lethal info tiles.  Calling this
+ * function with a parameter of 0 will simply refresh the health bar
+ * display.  Call it with a parameter of -10 to kill the worminator or
+ * call it with a parameter of 10 to fully heal the Worminator.         */
 void hurt_player(char amount_to_hurt);
 
 /* This function will display the death animation, re-load the level, and
-   then return.  You should not normally call this.  Instead, call hurt
-   player with a parameter of -10 to kill the Worminator.               */
+ * then return.  You should not normally call this.  Instead, call hurt
+ * player with a parameter of -10 to kill the Worminator.               */
 void kill_player();
 
 //////////////////////////////////////////////////////////////////////////

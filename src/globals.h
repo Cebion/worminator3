@@ -1,9 +1,9 @@
 /* -- Globals.h --
-Part of the Worminator 2D game engine
-Copyright 2002 by Electroencephlogram Software
-
-This file includes all of the global variables used in the Worminator
-game engine.  It also has all of the structure typedefs. */
+ * Part of the Worminator 2D game engine
+ * Copyright 2002 by Electroencephlogram Software
+ *
+ * This file includes all of the global variables used in the Worminator
+ * game engine.  It also has all of the structure typedefs. */
 
 /*************\
 |** DEFINES **|
@@ -96,114 +96,114 @@ const float RADIAN_CONVERTER = 3.14159 / 180;
 \****************/
 
 typedef struct PLAYER {
-	int timer;
-	int width, height;
-	int frame;
-	char animation_timer;
-	char direction;
-	char current_weapon, ammo_type;
-	char on_ground;
-	char in_water;
-	char is_ducking;
-	char letter_order;
-	int score;
-	char health_bars_left;
-	char has_red_keycard, has_green_keycard, has_blue_keycard;
-	int bullets_left, shells_left, rockets_left, cells_left, gasoline_left, mortars_left, plasma_left, mines_left;
-	int chainsaw_duration_left, plasma_bullets_left, explosive_shells_left, micro_nukes_left, walking_mines_left, spikestars_left, rails_left;
-	float x_position_in_pixels, y_position_in_pixels;
-	float x_acceleration, y_acceleration;
-	char skin;
-	char turbo_launch, no_control;
-	} PLAYER;
+	int	timer;
+	int	width, height;
+	int	frame;
+	char	animation_timer;
+	char	direction;
+	char	current_weapon, ammo_type;
+	char	on_ground;
+	char	in_water;
+	char	is_ducking;
+	char	letter_order;
+	int	score;
+	char	health_bars_left;
+	char	has_red_keycard, has_green_keycard, has_blue_keycard;
+	int	bullets_left, shells_left, rockets_left, cells_left, gasoline_left, mortars_left, plasma_left, mines_left;
+	int	chainsaw_duration_left, plasma_bullets_left, explosive_shells_left, micro_nukes_left, walking_mines_left, spikestars_left, rails_left;
+	float	x_position_in_pixels, y_position_in_pixels;
+	float	x_acceleration, y_acceleration;
+	char	skin;
+	char	turbo_launch, no_control;
+} PLAYER;
 
 typedef struct SPRITE {
-	int sprite_active;
-	int sprite_type;
-	char in_range;
-	int timer;
-	char animation_state;
-	int width, height;
-	int action_state;
-	int frame;
-	float hit_points_left;
-	float x_position_in_pixels, y_position_in_pixels;
-	float x_acceleration, y_acceleration;
-	char direction;
-	unsigned char rotate_factor;
-	} SPRITE;
+	int		sprite_active;
+	int		sprite_type;
+	char		in_range;
+	int		timer;
+	char		animation_state;
+	int		width, height;
+	int		action_state;
+	int		frame;
+	float		hit_points_left;
+	float		x_position_in_pixels, y_position_in_pixels;
+	float		x_acceleration, y_acceleration;
+	char		direction;
+	unsigned char	rotate_factor;
+} SPRITE;
 
 typedef struct PATRTICLE_BEAM {
-	char beam_active;
-	int x1, y, x2;
-	unsigned char color;
-	unsigned char timer;
-	unsigned char color_mode;
-	} PARTICLE_BEAM;
+	char		beam_active;
+	int		x1, y, x2;
+	unsigned char	color;
+	unsigned char	timer;
+	unsigned char	color_mode;
+} PARTICLE_BEAM;
 
 typedef struct EDITOR_SPRITE {
-	short int sprite_type;
-	int x_position_in_pixels, y_position_in_pixels;
-	} EDITOR_SPRITE;
+	short int	sprite_type;
+	int		x_position_in_pixels, y_position_in_pixels;
+} EDITOR_SPRITE;
 
 typedef struct WORMINATOR_MAP_FORMAT {
-	unsigned short int map_width;
-	unsigned short int map_height;
-	char map_name[80];
-	short int background_tile_grid[256][192];
-	short int foreground_tile_grid[256][192];
-	short int info_tile_grid[256][192];
-	char graphical_properties_tile_grid[256][192];
-	EDITOR_SPRITE starting_sprites[256];
-	char weather;
-	} WORMINATOR_MAP_FORMAT;
+	unsigned short int	map_width;
+	unsigned short int	map_height;
+	char			map_name[80];
+	short int		background_tile_grid[256][192];
+	short int		foreground_tile_grid[256][192];
+	short int		info_tile_grid[256][192];
+	char			graphical_properties_tile_grid[256][192];
+	EDITOR_SPRITE		starting_sprites[256];
+	char			weather;
+} WORMINATOR_MAP_FORMAT;
 
 typedef struct TEXT_MESSAGE {
-	short int timer;
-	char *message;
-	} TEXT_MESSAGE;
+	short int	timer;
+	char *		message;
+} TEXT_MESSAGE;
 
 typedef struct WORMINATOR_CONFIGURATION {
-	int screen_width, screen_height;
-	int controls[28];
-	int secondary_controls[28];
-	int high_scores[10];
-	char high_score_names[10][16];
-	int game_speed;
-	char difficulty;
-	int skin;
+	int		screen_width, screen_height;
+	int		controls[28];
+	int		secondary_controls[28];
+	int		high_scores[10];
+	char		high_score_names[10][16];
+	int		game_speed;
+	char		difficulty;
+	int		skin;
 
-	char particle_detail;
+	char		particle_detail;
 #ifdef ALLEGRO_WINDOWS
-	char safe_mode;
+	char		safe_mode;
 #endif
-	char stretch_levels;
+	char		stretch_levels;
 
-	char remember_skin;
-	char may_tricks_mode;
-	char autoswitch_weapons;
-	char switch_weapons_on_pickup;
+	char		remember_skin;
+	char		may_tricks_mode;
+	char		autoswitch_weapons;
+	char		switch_weapons_on_pickup;
 
-	char godly_mode;
-	char freeze_mode;
-	char rapid_fire_mode;
-	char fly_mode;
-	char wealth_mode;
-	char super_turkey_mode;
-	char ekg_mode;
-	char cool_mode;
+	char		godly_mode;
+	char		freeze_mode;
+	char		rapid_fire_mode;
+	char		fly_mode;
+	char		wealth_mode;
+	char		super_turkey_mode;
+	char		ekg_mode;
+	char		cool_mode;
 
-	unsigned char sound_volume;
-	unsigned char music_volume;
-	char disable_sound;
-	char disable_music;
+	unsigned char	sound_volume;
+	unsigned char	music_volume;
+	char		disable_sound;
+	char		disable_music;
 
-	char skip_intro;
-	char display_particles;
-	char show_laser_sight;
-	char run_windowed;
-	char enable_FSAA;
-	} WORMINATOR_CONFIGURATION;
+	char		skip_intro;
+	char		display_particles;
+	char		show_laser_sight;
+	char		run_windowed;
+	char		enable_FSAA;
+} WORMINATOR_CONFIGURATION;
 
 /*****************\
 |** GLOBAL DATA **|
@@ -341,8 +341,8 @@ PALETTE srcpal, destpal, temppal;
 int pal_time = 0;
 
 // Console data and variables
-int console_position = -1;  // -1 indicates console inactive
-int console_key_state = 0;  // Used for input
-char console_state = 0;  // 0 = inactive, 1 = lowering, 2 = lowered, 3 = raising
+int console_position = -1;				// -1 indicates console inactive
+int console_key_state = 0;				// Used for input
+char console_state = 0;					// 0 = inactive, 1 = lowering, 2 = lowered, 3 = raising
 char consoleText[MAX_CONSOLE_LINES][MAX_CONSOLE_LINE_LENGTH];
-char inputString[MAX_CONSOLE_LINE_LENGTH] = {0};  // The input string we are reading currently
+char inputString[MAX_CONSOLE_LINE_LENGTH] = { 0 };	// The input string we are reading currently

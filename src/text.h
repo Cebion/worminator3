@@ -376,6 +376,34 @@ void clear_console()
 	add_console_line("Console cleared.");
 }
 
+#ifndef ALLEGRO_WINDOWS
+char log_txt[] = "/tmp/log.txt";
+#else
+char log_txt[] = "./log.txt";
+#endif
+
+// logs the text to the text file
+void log2file(char *format, ...) {
+	va_list ptr; /* get an arg pointer */
+	FILE *fp;
+	static int flag = 0;
+
+	fp = fopen(log_txt, (!flag ? "wt" : "at"));
+	if (fp) {
+		/* initialize ptr to point to the first argument after the format string */
+		va_start(ptr, format);
+
+		/* Write to logfile. */
+		vfprintf(fp, format, ptr); // Write passed text.
+		fprintf(fp, "\n"); // New line..
+
+		va_end(ptr);
+
+		fclose(fp);
+		flag = 1;
+	}
+}
+
 void add_console_line(char *string)
 {
 	int i;
@@ -383,6 +411,9 @@ void add_console_line(char *string)
 	// We might get passed an empty string
 	if (!string)
 		return;
+
+	// Copy to log file
+	log2file(string);
 
 	// Search for empty space to add
 	for (i = 0; i < MAX_CONSOLE_LINES; i++) if (consoleText[i][0] == 0) {	// Find the first free line

@@ -319,7 +319,9 @@ int main(int argc, char *argv[])
 	// Main menu
 	add_console_line("Starting up menu.");
 	set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
-	stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+	stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat,
+		     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+	blit(swap_buffer, screen, 0, 0, 0, 0, screen_width, screen_height);
 	wormy_menu();
 	add_console_line("Menu terminated.");
 	add_console_line(" ");
@@ -3263,6 +3265,7 @@ void initialize()
 
 	// Create cache bitmaps and other graphical stuff
 	add_console_line("Creating bitmaps.");
+	swap_buffer = create_bitmap_ex(8, wormy_config.screen_width, wormy_config.screen_height);
 	screen_buffer = create_bitmap_ex(8, 320, 200);
 	double_buffer = create_bitmap_ex(8, (int)(screen_width * .8), (int)(screen_height * .96));
 	stretch_buffer = create_bitmap_ex(8, (int)(screen_width * .8), (int)(screen_height * .96));

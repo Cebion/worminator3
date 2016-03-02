@@ -220,6 +220,7 @@ WORMINATOR_CONFIGURATION wormy_config;
 DATAFILE *worminator_data_file = NULL;
 FILE *demofile;
 
+BITMAP *swap_buffer; // for color conversion
 BITMAP *screen_buffer;
 BITMAP *double_buffer;
 BITMAP *stretch_buffer;

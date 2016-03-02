@@ -2679,8 +2679,8 @@ void load_config()
 	game_is_running = FALSE;
 
 	// Read in all the config settings, defaults will be used if config is missing
-	wormy_config.screen_width = get_config_int("Options", "screen_width", 640);
-	wormy_config.screen_height = get_config_int("Options", "screen_height", 480);
+	wormy_config.screen_width = get_config_int("Options", "screen_width", 320);
+	wormy_config.screen_height = get_config_int("Options", "screen_height", 240);
 
 	wormy_config.controls[INPUT_UP] = get_config_int("Keys", "up", KEY_UP);
 	wormy_config.controls[INPUT_DOWN] = get_config_int("Keys", "down", KEY_DOWN);

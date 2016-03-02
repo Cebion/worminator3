@@ -3103,6 +3103,7 @@ void change_game_speed(int speed)
 void change_resolution(int x, int y)
 {
 	char weather_loop;
+	int result=0;
 
 	// Change screen width and height variables
 	screen_width = x;
@@ -3110,16 +3111,25 @@ void change_resolution(int x, int y)
 
 	// Resize the display
 #ifdef ALLEGRO_WINDOWS
-	if (wormy_config.safe_mode == 1 && wormy_config.run_windowed == FALSE) set_gfx_mode(GFX_DIRECTX, screen_width, screen_height, 0, 0);
-	else if (wormy_config.safe_mode == 0 && wormy_config.run_windowed == FALSE) set_gfx_mode(GFX_SAFE, screen_width, screen_height, 0, 0);
-	else if (wormy_config.safe_mode == 1 && wormy_config.run_windowed == TRUE) set_gfx_mode(GFX_DIRECTX_WIN, screen_width, screen_height, 0, 0);
-	else if (wormy_config.safe_mode == 0 && wormy_config.run_windowed == TRUE) set_gfx_mode(GFX_GDI, screen_width, screen_height, 0, 0);
+	if (wormy_config.safe_mode == 1 && wormy_config.run_windowed == FALSE)
+		result = set_gfx_mode(GFX_DIRECTX, screen_width, screen_height, 0, 0);
+	else if (wormy_config.safe_mode == 0 && wormy_config.run_windowed == FALSE)
+		result = set_gfx_mode(GFX_SAFE, screen_width, screen_height, 0, 0);
+	else if (wormy_config.safe_mode == 1 && wormy_config.run_windowed == TRUE)
+		result = set_gfx_mode(GFX_DIRECTX_WIN, screen_width, screen_height, 0, 0);
+	else if (wormy_config.safe_mode == 0 && wormy_config.run_windowed == TRUE)
+		result = set_gfx_mode(GFX_GDI, screen_width, screen_height, 0, 0);
 #else
 	if (wormy_config.run_windowed)
-		set_gfx_mode(GFX_AUTODETECT_WINDOWED, screen_width, screen_height, 0, 0);
+		result = set_gfx_mode(GFX_AUTODETECT_WINDOWED, screen_width, screen_height, 0, 0);
 	else
-		set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, screen_width, screen_height, 0, 0);
+		result = set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, screen_width, screen_height, 0, 0);
 #endif
+
+	if (result) {
+		log2file("ERROR: %s", allegro_error);
+		exit(-1);
+	}
 
 	// Reset the pallete
 	set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);

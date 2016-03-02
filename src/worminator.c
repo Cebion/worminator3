@@ -61,7 +61,7 @@ void savedisplay()
 {
 	acquire_screen();
 	if (screenbackup != NULL) destroy_bitmap(screenbackup);
-	screenbackup = create_bitmap(screen_width, screen_height);
+	screenbackup = create_bitmap_ex(8, screen_width, screen_height);
 	blit(screen, screenbackup, 0, 0, 0, 0, screen_width, screen_height);
 	release_screen();
 }
@@ -1185,7 +1185,7 @@ void handle_input()
 
 void warp_effect(BITMAP *bmp, int x, int y, int width, int height, int amplitude)
 {
-	BITMAP *buf = create_bitmap(width, height);
+	BITMAP *buf = create_bitmap_ex(8, width, height);
 	int i;						// Loop index
 	float radianconverter = (3.1415927 / width);	// Float that we will use to convert from degrees to radians
 
@@ -3065,9 +3065,9 @@ void load_tiles()
 
 	tiles = worminator_data_file[TILES].dat;
 
-	worminator_tiles = create_bitmap((tiles->h / 16) * 256, 16);
-	worminator_info_tiles = create_bitmap(3072, 16);
-	worminator_graphical_properties_tiles = create_bitmap(3072, 16);
+	worminator_tiles = create_bitmap_ex(8, (tiles->h / 16) * 256, 16);
+	worminator_info_tiles = create_bitmap_ex(8, 3072, 16);
+	worminator_graphical_properties_tiles = create_bitmap_ex(8, 3072, 16);
 
 	// Copy the background and foreground tiles row by row
 	for (build_tileset_loop = 0; build_tileset_loop < (tiles->h / 16); build_tileset_loop++)
@@ -3129,10 +3129,10 @@ void change_resolution(int x, int y)
 	destroy_bitmap(stretch_buffer);
 	destroy_bitmap(FSAA_buffer);
 	destroy_bitmap(ed_double_buffer);
-	double_buffer = create_bitmap((int)(screen_width * .8), (int)(screen_height * .96));
-	stretch_buffer = create_bitmap((int)(screen_width * .8), (int)(screen_height * .96));
-	FSAA_buffer = create_bitmap((int)(screen_width * .8), (int)(screen_height * .96));
-	ed_double_buffer = create_bitmap(screen_width, screen_height);
+	double_buffer = create_bitmap_ex(8, (int)(screen_width * .8), (int)(screen_height * .96));
+	stretch_buffer = create_bitmap_ex(8, (int)(screen_width * .8), (int)(screen_height * .96));
+	FSAA_buffer = create_bitmap_ex(8, (int)(screen_width * .8), (int)(screen_height * .96));
+	ed_double_buffer = create_bitmap_ex(8, screen_width, screen_height);
 
 	// Reset the weather system with some random values
 	for (weather_loop = 0; weather_loop < 64; weather_loop++) {
@@ -3249,11 +3249,11 @@ void initialize()
 
 	// Create cache bitmaps and other graphical stuff
 	add_console_line("Creating bitmaps.");
-	screen_buffer = create_bitmap(320, 200);
-	double_buffer = create_bitmap((int)(screen_width * .8), (int)(screen_height * .96));
-	stretch_buffer = create_bitmap((int)(screen_width * .8), (int)(screen_height * .96));
-	FSAA_buffer = create_bitmap((int)(screen_width * .8), (int)(screen_height * .96));
-	spawned_sprite = create_bitmap(16, 16);
+	screen_buffer = create_bitmap_ex(8, 320, 200);
+	double_buffer = create_bitmap_ex(8, (int)(screen_width * .8), (int)(screen_height * .96));
+	stretch_buffer = create_bitmap_ex(8, (int)(screen_width * .8), (int)(screen_height * .96));
+	FSAA_buffer = create_bitmap_ex(8, (int)(screen_width * .8), (int)(screen_height * .96));
+	spawned_sprite = create_bitmap_ex(8, 16, 16);
 	create_trans_table(&trans_table, worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 128, 128, 128, 0);
 	color_map = &trans_table;
 
@@ -3282,7 +3282,8 @@ void initialize()
 
 	// Initialize the display
 	add_console_line("Initilizing video");
-	set_color_depth(8);
+	set_color_depth(16);
+	set_color_conversion(COLORCONV_NONE);
 	change_resolution(wormy_config.screen_width, wormy_config.screen_height);
 	set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 	set_display_switch_mode(SWITCH_AMNESIA);

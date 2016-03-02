@@ -71,7 +71,7 @@ char done_button(char draw_flags, int y);
 \*******************/
 int editor()
 {
-	BITMAP *backup = create_bitmap(screen_width, screen_height);
+	BITMAP *backup = create_bitmap_ex(8, screen_width, screen_height);
 	BITMAP *plax_backup = parallax_background;
 	unsigned char done = 0;
 
@@ -577,7 +577,7 @@ char select_layer_button()
 	if (!in_region) return 0;
 
 	// Scroll out the popup select layer window
-	ed_temp = create_bitmap(52, 64);
+	ed_temp = create_bitmap_ex(8, 52, 64);
 	if (current_editing_layer == 0) blit(worminator_data_file[ED_POPUP_SELECT_LAYER_WINDOW_DOWN].dat, ed_temp, 0, 0, 0, 0, 52, 16);
 	else blit(worminator_data_file[ED_POPUP_SELECT_LAYER_WINDOW].dat, ed_temp, 0, 0, 0, 0, 52, 16);
 	if (current_editing_layer == 1) blit(worminator_data_file[ED_POPUP_SELECT_LAYER_WINDOW_DOWN].dat, ed_temp, 0, 16, 0, 16, 52, 16);
@@ -636,7 +636,7 @@ char select_layer_button()
 	ed_render_map();
 
 	// Scroll in the popup select layer window
-	ed_temp = create_bitmap(52, 64);
+	ed_temp = create_bitmap_ex(8, 52, 64);
 	if (current_editing_layer == 0) blit(worminator_data_file[ED_POPUP_SELECT_LAYER_WINDOW_DOWN].dat, ed_temp, 0, 0, 0, 0, 52, 16);
 	else blit(worminator_data_file[ED_POPUP_SELECT_LAYER_WINDOW].dat, ed_temp, 0, 0, 0, 0, 52, 16);
 	if (current_editing_layer == 1) blit(worminator_data_file[ED_POPUP_SELECT_LAYER_WINDOW_DOWN].dat, ed_temp, 0, 16, 0, 16, 52, 16);
@@ -1926,7 +1926,7 @@ char display_properties_button()
 	if (!in_region) return 0;
 
 	// Scroll out the popup display properties window
-	ed_temp = create_bitmap(52, 80);
+	ed_temp = create_bitmap_ex(8, 52, 80);
 	if (show_background_layer == 0) blit(worminator_data_file[ED_POPUP_DISPLAY_PROPERTIES_WINDOW].dat, ed_temp, 0, 0, 0, 0, 52, 16);
 	else blit(worminator_data_file[ED_POPUP_DISPLAY_PROPERTIES_WINDOW_DOWN].dat, ed_temp, 0, 0, 0, 0, 52, 16);
 	if (show_foreground_layer == 0) blit(worminator_data_file[ED_POPUP_DISPLAY_PROPERTIES_WINDOW].dat, ed_temp, 0, 16, 0, 16, 52, 16);
@@ -2024,7 +2024,7 @@ char display_properties_button()
 			while (mouse_b & 1) {
 			}
 			// Scroll in the popup display properties window
-			ed_temp = create_bitmap(52, 80);
+			ed_temp = create_bitmap_ex(8, 52, 80);
 			if (show_background_layer == 0) blit(worminator_data_file[ED_POPUP_DISPLAY_PROPERTIES_WINDOW].dat, ed_temp, 0, 0, 0, 0, 52, 16);
 			else blit(worminator_data_file[ED_POPUP_DISPLAY_PROPERTIES_WINDOW_DOWN].dat, ed_temp, 0, 0, 0, 0, 52, 16);
 			if (show_foreground_layer == 0) blit(worminator_data_file[ED_POPUP_DISPLAY_PROPERTIES_WINDOW].dat, ed_temp, 0, 16, 0, 16, 52, 16);

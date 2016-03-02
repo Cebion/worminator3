@@ -403,7 +403,7 @@ void draw_console(BITMAP *bmp, int position)
 	if (console_position == -1) return;	// Console is hidden
 
 	// Create and clear the console bitmap
-	consoleBmp = create_bitmap(screen_width, screen_height / 2);
+	consoleBmp = create_bitmap_ex(8, screen_width, screen_height / 2);
 	rectfill(consoleBmp, 0, 0, screen_width, screen_height / 2, makecol(0, 0, 0));
 
 	// Find the first free line and draw up from there

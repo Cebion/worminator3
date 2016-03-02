@@ -167,7 +167,7 @@ char *save_game_filename(void)
 \****************/
 void wormy_menu()
 {
-	BITMAP *backup_bitmap = create_bitmap(320, 200);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, 320, 200);
 	char close_menu = FALSE;
 	char close_submenu = FALSE;
 	char esc_status = 0;
@@ -974,7 +974,7 @@ void wormy_menu()
 \************************/
 void wormy_options_menu()
 {
-	BITMAP *temp_buffer = create_bitmap(320, 200);
+	BITMAP *temp_buffer = create_bitmap_ex(8, 320, 200);
 	int new_sw = screen_width, new_sh = screen_height;
 	char close_options_menu = FALSE;
 	char redraw_options_menu = TRUE;
@@ -1357,7 +1357,7 @@ char start_new_custom_game()
 {
 	char retval = FALSE;
 	char file_name[256] = "";
-	BITMAP *backup_bitmap = create_bitmap(320, 200);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, 320, 200);
 
 	// Back up existing screen
 	show_mouse(NULL);
@@ -1385,7 +1385,7 @@ char play_a_demo()
 {
 	char retval = 0;
 	char file_name[256] = "";
-	BITMAP *backup_bitmap = create_bitmap(320, 200);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, 320, 200);
 
 	// Back up existing screen
 	show_mouse(NULL);
@@ -1407,7 +1407,7 @@ char play_a_demo()
 void record_a_demo()
 {
 	char file_name[256] = "";
-	BITMAP *backup_bitmap = create_bitmap(320, 200);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, 320, 200);
 
 	// Back up existing screen
 	show_mouse(NULL);
@@ -1427,7 +1427,7 @@ void record_a_demo()
 \*********************/
 char wormy_dummy_box(char dummy_question_patch_number, char show_mouse_pointer)
 {
-	BITMAP *backup_bitmap = create_bitmap(128, 64);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, 128, 64);
 	char close_dummy_box = FALSE;
 
 	// Pause the game while the dummy box is open
@@ -1503,8 +1503,8 @@ char wormy_dummy_box(char dummy_question_patch_number, char show_mouse_pointer)
 \**********************/
 void display_snapshot(char snapshot_number, char show_mouse_pointer)
 {
-	BITMAP *backup_bitmap = create_bitmap(screen_width, screen_height);
-	BITMAP *buffer_bitmap = create_bitmap(320, 200);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, screen_width, screen_height);
+	BITMAP *buffer_bitmap = create_bitmap_ex(8, 320, 200);
 	int i;
 	char close_snapshot = FALSE;
 	char buf[256];
@@ -1619,8 +1619,8 @@ void display_snapshot(char snapshot_number, char show_mouse_pointer)
 \*******************/
 void display_story(char show_mouse_pointer)
 {
-	BITMAP *backup_bitmap = create_bitmap(screen_width, screen_height);
-	BITMAP *temp_buffer = create_bitmap(screen_width, screen_height);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, screen_width, screen_height);
+	BITMAP *temp_buffer = create_bitmap_ex(8, screen_width, screen_height);
 	char close_story = FALSE;
 	char story_page_number = 0;
 
@@ -1725,8 +1725,8 @@ void display_story(char show_mouse_pointer)
 \*******************/
 void display_recap(char show_mouse_pointer)
 {
-	BITMAP *backup_bitmap = create_bitmap(screen_width, screen_height);
-	BITMAP *temp_buffer = create_bitmap(screen_width, screen_height);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, screen_width, screen_height);
+	BITMAP *temp_buffer = create_bitmap_ex(8, screen_width, screen_height);
 	char close_story = FALSE;
 	char story_page_number = 0;
 
@@ -1854,8 +1854,8 @@ void check_high_score()
 \************************/
 void get_highscore_name(int position)
 {
-	BITMAP *backup = create_bitmap(128, 64);
-	BITMAP *buffer = create_bitmap(128, 64);
+	BITMAP *backup = create_bitmap_ex(8, 128, 64);
+	BITMAP *buffer = create_bitmap_ex(8, 128, 64);
 	int pos = 0, keypress;
 	char input[16];
 	char done = FALSE;
@@ -1920,8 +1920,8 @@ void get_highscore_name(int position)
 void dofinalescroll()
 {
 	int position = 0;
-	BITMAP *buf = create_bitmap(320, 200);
-	BITMAP *screenbuf = create_bitmap(screen_width, screen_height);
+	BITMAP *buf = create_bitmap_ex(8, 320, 200);
+	BITMAP *screenbuf = create_bitmap_ex(8, screen_width, screen_height);
 
 	change_game_speed(12);
 	clear_keybuf();
@@ -1961,7 +1961,7 @@ void draw_key(BITMAP *bmp, int x, int y, int key)
 \*****************/
 int get_new_key()
 {
-	BITMAP *backup = create_bitmap(128, 64);
+	BITMAP *backup = create_bitmap_ex(8, 128, 64);
 	int keyprs = 0, i;
 	char oldkeys[KEY_MAX];
 	char done = FALSE;
@@ -2006,7 +2006,7 @@ int get_new_key()
 \***************************/
 int wormy_controls_menu_1()
 {
-	BITMAP *temp_buffer = create_bitmap(320, 200);
+	BITMAP *temp_buffer = create_bitmap_ex(8, 320, 200);
 	char close_controls_menu = FALSE;
 	char redraw_controls_menu = TRUE;
 	int return_value = 0;
@@ -2195,7 +2195,7 @@ int wormy_controls_menu_1()
 \***************************/
 int wormy_controls_menu_2()
 {
-	BITMAP *temp_buffer = create_bitmap(320, 200);
+	BITMAP *temp_buffer = create_bitmap_ex(8, 320, 200);
 	char close_controls_menu = FALSE;
 	char redraw_controls_menu = TRUE;
 	int return_value = 0;
@@ -2392,7 +2392,7 @@ int wormy_controls_menu_2()
 \***************************/
 int wormy_controls_menu_3()
 {
-	BITMAP *temp_buffer = create_bitmap(320, 200);
+	BITMAP *temp_buffer = create_bitmap_ex(8, 320, 200);
 	char close_controls_menu = FALSE;
 	char redraw_controls_menu = TRUE;
 	int return_value = 0;
@@ -2593,7 +2593,7 @@ int wormy_controls_menu_3()
 \*************************/
 void wormy_controls_menu()
 {
-	BITMAP *backup = create_bitmap(screen_width, screen_height);
+	BITMAP *backup = create_bitmap_ex(8, screen_width, screen_height);
 	int page_num = 0;
 	char done = FALSE;
 
@@ -2635,7 +2635,7 @@ void save_screenshot()
 		sprintf(fname, "shot%d.bmp", shotnum);
 	} while (exists(fname));
 	set_color_depth(8);
-	backup = create_bitmap(screen_width, screen_height);
+	backup = create_bitmap_ex(8, screen_width, screen_height);
 	blit(screen, backup, 0, 0, 0, 0, screen_width, screen_height);
 	save_bmp(fname, backup, worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 	destroy_bitmap(backup);

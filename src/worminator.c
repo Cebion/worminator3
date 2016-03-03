@@ -57,6 +57,13 @@
 
 #define WORMINATOR_VERSION "3.0:  Please report bugs!"
 
+void blit_to_screen(BITMAP *bmp)
+{
+	acquire_screen();
+	blit(bmp, screen, 0, 0, 0, 0, screen_width, screen_height);
+	release_screen();
+}
+
 void savedisplay()
 {
 	acquire_screen();
@@ -1231,25 +1238,35 @@ void render_map()
 	// Show the automap if nessicary
 	if (display_map == TRUE) {
 		show_map();
-		stretch_blit(double_buffer, screen, 0, 0, 256, 192, (int)(screen_width * 0.0125), (int)(screen_height * 0.02), (int)(screen_width * .8), (int)(screen_height * .96));
+		stretch_blit(double_buffer, swap_buffer, 0, 0, 256, 192,
+			     (int)(screen_width * 0.0125), (int)(screen_height * 0.02),
+			     (int)(screen_width * .8), (int)(screen_height * .96));
 		return;
 	}
 
 	// Process the scroll stop tiles
-	i = (player.x_position_in_pixels / 16) + 1; j = (player.y_position_in_pixels / 16) + 1;
-	for (i = (player.x_position_in_pixels / 16) + 1; i >= 0; i--) if (worminator_map.graphical_properties_tile_grid[i][j] == scroll_stop_grph_tile || i == 0) {
+	i = (player.x_position_in_pixels / 16) + 1;
+	j = (player.y_position_in_pixels / 16) + 1;
+	for (i = (player.x_position_in_pixels / 16) + 1; i >= 0; i--)
+		if (worminator_map.graphical_properties_tile_grid[i][j] == scroll_stop_grph_tile || i == 0) {
 			topx = i; break;
 		}
-	i = (player.x_position_in_pixels / 16) + 1; j = (player.y_position_in_pixels / 16) + 1;
-	for (j = (player.y_position_in_pixels / 16) + 1; j >= 0; j--) if (worminator_map.graphical_properties_tile_grid[i][j] == scroll_stop_grph_tile || j == 0) {
+	i = (player.x_position_in_pixels / 16) + 1;
+	j = (player.y_position_in_pixels / 16) + 1;
+	for (j = (player.y_position_in_pixels / 16) + 1; j >= 0; j--)
+		if (worminator_map.graphical_properties_tile_grid[i][j] == scroll_stop_grph_tile || j == 0) {
 			topy = j; break;
 		}
-	i = (player.x_position_in_pixels / 16) + 1; j = (player.y_position_in_pixels / 16) + 1;
-	for (i = (player.x_position_in_pixels / 16) + 1; i < worminator_map.map_width; i++) if (worminator_map.graphical_properties_tile_grid[i][j] == scroll_stop_grph_tile || i == worminator_map.map_width - 1) {
+	i = (player.x_position_in_pixels / 16) + 1;
+	j = (player.y_position_in_pixels / 16) + 1;
+	for (i = (player.x_position_in_pixels / 16) + 1; i < worminator_map.map_width; i++)
+		if (worminator_map.graphical_properties_tile_grid[i][j] == scroll_stop_grph_tile || i == worminator_map.map_width - 1) {
 			bottomx = i + 1; break;
 		}
-	i = (player.x_position_in_pixels / 16) + 1; j = (player.y_position_in_pixels / 16) + 1;
-	for (j = (player.y_position_in_pixels / 16) + 1; j < worminator_map.map_height; j++) if (worminator_map.graphical_properties_tile_grid[i][j] == scroll_stop_grph_tile || j == worminator_map.map_height - 1) {
+	i = (player.x_position_in_pixels / 16) + 1;
+	j = (player.y_position_in_pixels / 16) + 1;
+	for (j = (player.y_position_in_pixels / 16) + 1; j < worminator_map.map_height; j++)
+		if (worminator_map.graphical_properties_tile_grid[i][j] == scroll_stop_grph_tile || j == worminator_map.map_height - 1) {
 			bottomy = j + 1; break;
 		}
 
@@ -1263,27 +1280,35 @@ void render_map()
 		screen_width = 320, screen_height = 200;
 
 		// Set screen position
-		screen_x_position = (int)(player.x_position_in_pixels - ((int)(screen_width * .8) / 2) + 16);
-		screen_y_position = (int)(player.y_position_in_pixels - ((int)(screen_height * .96) / 2) + 16 + look_shift);
+		screen_x_position = (int)(player.x_position_in_pixels -
+				          ((int)(screen_width * .8) / 2) + 16);
+		screen_y_position = (int)(player.y_position_in_pixels -
+					  ((int)(screen_height * .96) / 2) + 16 + look_shift);
 
-		if (screen_x_position > bottomx * 16 - (int)(screen_width * .8)) screen_x_position = bottomx * 16 - (int)(screen_width * .8);
-		if (screen_y_position > bottomy * 16 - (int)(screen_height * .96)) screen_y_position = bottomy * 16 - (int)(screen_height * .96);
+		if (screen_x_position > bottomx * 16 - (int)(screen_width * .8))
+			screen_x_position = bottomx * 16 - (int)(screen_width * .8);
+		if (screen_y_position > bottomy * 16 - (int)(screen_height * .96))
+			screen_y_position = bottomy * 16 - (int)(screen_height * .96);
 
-		if (screen_x_position < topx * 16) screen_x_position = topx * 16;
-		if (screen_y_position < topy * 16) screen_y_position = topy * 16;
+		if (screen_x_position < topx * 16)
+			screen_x_position = topx * 16;
+		if (screen_y_position < topy * 16)
+			screen_y_position = topy * 16;
 
 		sx = screen_x_position;
 		sy = screen_y_position;
 
 		// FSAA - Render a current sample as primary sample
 		render_map();
-		stretch_blit(double_buffer, FSAA_buffer, 0, 0, 256, 192, 0, 0, (int)(plax_x * .8), (int)(plax_y * .96));
+		stretch_blit(double_buffer, FSAA_buffer, 0, 0, 256, 192, 0, 0,
+			     (int)(plax_x * .8), (int)(plax_y * .96));
 
 		// FSAA - Take a shifted sample
 		screen_x_position++;
 		screen_y_position++;
 		render_map();
-		stretch_blit(double_buffer, stretch_buffer, 0, 0, 256, 192, 0, 0, (int)(plax_x * .8), (int)(plax_y * .96));
+		stretch_blit(double_buffer, stretch_buffer, 0, 0, 256, 192, 0, 0,
+			     (int)(plax_x * .8), (int)(plax_y * .96));
 		draw_trans_sprite(FSAA_buffer, stretch_buffer, 1, 1);
 		screen_y_position--;
 		screen_x_position--;
@@ -1293,11 +1318,15 @@ void render_map()
 		screen_width = plax_x, screen_height = plax_y;
 
 		// Set screen position
-		screen_x_position = (int)(player.x_position_in_pixels - ((int)(screen_width * .8) / 2) + 16);
-		screen_y_position = (int)(player.y_position_in_pixels - ((int)(screen_height * .96) / 2) + 16 + look_shift);
+		screen_x_position = (int)(player.x_position_in_pixels -
+					  ((int)(screen_width * .8) / 2) + 16);
+		screen_y_position = (int)(player.y_position_in_pixels -
+					  ((int)(screen_height * .96) / 2) + 16 + look_shift);
 
-		if (screen_x_position > bottomx * 16 - (int)(screen_width * .8)) screen_x_position = bottomx * 16 - (int)(screen_width * .8);
-		if (screen_y_position > bottomy * 16 - (int)(screen_height * .96)) screen_y_position = bottomy * 16 - (int)(screen_height * .96);
+		if (screen_x_position > bottomx * 16 - (int)(screen_width * .8))
+			screen_x_position = bottomx * 16 - (int)(screen_width * .8);
+		if (screen_y_position > bottomy * 16 - (int)(screen_height * .96))
+			screen_y_position = bottomy * 16 - (int)(screen_height * .96);
 
 		if (screen_x_position < topx * 16) screen_x_position = topx * 16;
 		if (screen_y_position < topy * 16) screen_y_position = topy * 16;
@@ -1307,27 +1336,55 @@ void render_map()
 
 		// Update the controls
 		if (borders_dirty) {
-			stretch_blit(screen_buffer, screen, 0, 0, 320, 4, 0, 0, screen_width, (int)(screen_height * 0.02));
-			stretch_blit(screen_buffer, screen, 0, 4, 4, 192, 0, (int)(screen_height * 0.02), (int)(screen_width * 0.0125), screen_height - 2 * (int)(screen_height * 0.02));
-			stretch_blit(screen_buffer, screen, 0, 196, 320, 4, 0, screen_height - (int)(screen_height * 0.02), screen_width, (int)(screen_height * 0.02));
+			stretch_blit(screen_buffer, swap_buffer, 0, 0, 320, 4, 0, 0,
+				     screen_width, (int)(screen_height * 0.02));
+			stretch_blit(screen_buffer, swap_buffer, 0, 4, 4, 192, 0,
+				     (int)(screen_height * 0.02), (int)(screen_width * 0.0125),
+				     screen_height - 2 * (int)(screen_height * 0.02));
+			stretch_blit(screen_buffer, swap_buffer, 0, 196, 320, 4, 0,
+				     screen_height - (int)(screen_height * 0.02),
+				     screen_width, (int)(screen_height * 0.02));
 			borders_dirty = FALSE;
 		}
 		if (stats_dirty) {
-			stretch_blit(screen_buffer, screen, 260, 4, 60, 192, (int)(screen_width * 0.8125), (int)(screen_height * 0.02), screen_width - (int)(screen_width * 0.8125), screen_height - 2 * (int)(screen_height * 0.02));
+			stretch_blit(screen_buffer, swap_buffer, 260, 4, 60, 192,
+				     (int)(screen_width * 0.8125), (int)(screen_height * 0.02),
+				     screen_width - (int)(screen_width * 0.8125),
+				     screen_height - 2 * (int)(screen_height * 0.02));
 			stats_dirty = FALSE;
 		}
 
 		// FSAA - Draw final aliased image
 		if (quake_timer > 0 && !recording_demo && !playing_demo) {
-			set_clip(screen, (int)(screen_width * 0.0125), (int)(screen_height * 0.02), (int)(screen_width * .8) + 8, (int)(screen_height * .96) + 8);
-			if (quake_timer > 512) quake_timer = 512;
-			if (quake_timer > 256) blit(FSAA_buffer, screen, 0, 0, (int)(screen_width * 0.0125) + rand() % 16 - 8, (int)(screen_height * 0.02) + rand() % 16 - 8, (int)(screen_width * .8), (int)(screen_height * .96));
-			else if (quake_timer > 128) blit(FSAA_buffer, screen, 0, 0, (int)(screen_width * 0.0125) + rand() % 8 - 4, (int)(screen_height * 0.02) + rand() % 8 - 4, (int)(screen_width * .8), (int)(screen_height * .96));
-			else if (quake_timer > 64) blit(FSAA_buffer, screen, 0, 0, (int)(screen_width * 0.0125) + rand() % 4 - 2, (int)(screen_height * 0.02) + rand() % 4 - 2, (int)(screen_width * .8), (int)(screen_height * .96));
-			else blit(FSAA_buffer, screen, 0, 0, (int)(screen_width * 0.0125) + rand() % 2 - 1, (int)(screen_height * 0.02) + rand() % 2 - 1, (int)(screen_width * .8), (int)(screen_height * .96));
-			set_clip(screen, 0, 0, screen_width, screen_height);
+			set_clip(swap_buffer, (int)(screen_width * 0.0125), (int)(screen_height * 0.02),
+				 (int)(screen_width * .8) + 8, (int)(screen_height * .96) + 8);
+			if (quake_timer > 512)
+				quake_timer = 512;
+			if (quake_timer > 256)
+				blit(FSAA_buffer, swap_buffer, 0, 0,
+				     (int)(screen_width * 0.0125) + rand() % 16 - 8,
+				     (int)(screen_height * 0.02) + rand() % 16 - 8,
+				     (int)(screen_width * .8), (int)(screen_height * .96));
+			else if (quake_timer > 128)
+				blit(FSAA_buffer, swap_buffer, 0, 0,
+				     (int)(screen_width * 0.0125) + rand() % 8 - 4,
+				     (int)(screen_height * 0.02) + rand() % 8 - 4,
+				     (int)(screen_width * .8), (int)(screen_height * .96));
+			else if (quake_timer > 64)
+				blit(FSAA_buffer, swap_buffer, 0, 0,
+				     (int)(screen_width * 0.0125) + rand() % 4 - 2,
+				     (int)(screen_height * 0.02) + rand() % 4 - 2,
+				     (int)(screen_width * .8), (int)(screen_height * .96));
+			else
+				blit(FSAA_buffer, swap_buffer, 0, 0,
+				     (int)(screen_width * 0.0125) + rand() % 2 - 1,
+				     (int)(screen_height * 0.02) + rand() % 2 - 1,
+				     (int)(screen_width * .8), (int)(screen_height * .96));
+			set_clip(swap_buffer, 0, 0, screen_width, screen_height);
 		} else {
-			blit(FSAA_buffer, screen, 0, 0, (int)(screen_width * 0.0125), (int)(screen_height * 0.02), (int)(screen_width * .8), (int)(screen_height * .96));
+			blit(FSAA_buffer, swap_buffer, 0, 0,
+			     (int)(screen_width * 0.0125), (int)(screen_height * 0.02),
+			     (int)(screen_width * .8), (int)(screen_height * .96));
 		}
 
 		// The scene has been rendered, so we can return
@@ -1542,31 +1599,33 @@ void render_map()
 	if (wormy_config.enable_FSAA == FALSE) {
 		// Update the controls
 		if (borders_dirty) {
-			stretch_blit(screen_buffer, screen, 0, 0, 320, 4, 0, 0, screen_width, (int)(screen_height * 0.02));
-			stretch_blit(screen_buffer, screen, 0, 4, 4, 192, 0, (int)(screen_height * 0.02), (int)(screen_width * 0.0125), screen_height - 2 * (int)(screen_height * 0.02));
-			stretch_blit(screen_buffer, screen, 0, 196, 320, 4, 0, screen_height - (int)(screen_height * 0.02), screen_width, (int)(screen_height * 0.02));
+			stretch_blit(screen_buffer, swap_buffer, 0, 0, 320, 4, 0, 0, screen_width, (int)(screen_height * 0.02));
+			stretch_blit(screen_buffer, swap_buffer, 0, 4, 4, 192, 0, (int)(screen_height * 0.02), (int)(screen_width * 0.0125), screen_height - 2 * (int)(screen_height * 0.02));
+			stretch_blit(screen_buffer, swap_buffer, 0, 196, 320, 4, 0, screen_height - (int)(screen_height * 0.02), screen_width, (int)(screen_height * 0.02));
 			borders_dirty = FALSE;
 		}
 		if (stats_dirty) {
-			stretch_blit(screen_buffer, screen, 260, 4, 60, 192, (int)(screen_width * 0.8125), (int)(screen_height * 0.02), screen_width - (int)(screen_width * 0.8125), screen_height - 2 * (int)(screen_height * 0.02));
+			stretch_blit(screen_buffer, swap_buffer, 260, 4, 60, 192, (int)(screen_width * 0.8125), (int)(screen_height * 0.02), screen_width - (int)(screen_width * 0.8125), screen_height - 2 * (int)(screen_height * 0.02));
 			stats_dirty = FALSE;
 		}
 
 		if (quake_timer > 0 && !recording_demo && !playing_demo) {
-			set_clip(screen, (int)(screen_width * 0.0125), (int)(screen_height * 0.02), (int)(screen_width * .8) + 8, (int)(screen_height * .96) + 8);
+			set_clip(swap_buffer, (int)(screen_width * 0.0125), (int)(screen_height * 0.02), (int)(screen_width * .8) + 8, (int)(screen_height * .96) + 8);
 			if (quake_timer > 512) quake_timer = 512;
-			if (quake_timer > 256) blit(double_buffer, screen, 0, 0, (int)(screen_width * 0.0125) + rand() % 16 - 8, (int)(screen_height * 0.02) + rand() % 16 - 8, (int)(screen_width * .8), (int)(screen_height * .96));
-			else if (quake_timer > 128) blit(double_buffer, screen, 0, 0, (int)(screen_width * 0.0125) + rand() % 8 - 4, (int)(screen_height * 0.02) + rand() % 8 - 4, (int)(screen_width * .8), (int)(screen_height * .96));
-			else if (quake_timer > 64) blit(double_buffer, screen, 0, 0, (int)(screen_width * 0.0125) + rand() % 4 - 2, (int)(screen_height * 0.02) + rand() % 4 - 2, (int)(screen_width * .8), (int)(screen_height * .96));
-			else blit(double_buffer, screen, 0, 0, (int)(screen_width * 0.0125) + rand() % 2 - 1, (int)(screen_height * 0.02) + rand() % 2 - 1, (int)(screen_width * .8), (int)(screen_height * .96));
-			set_clip(screen, 0, 0, screen_width, screen_height);
+			if (quake_timer > 256) blit(double_buffer, swap_buffer, 0, 0, (int)(screen_width * 0.0125) + rand() % 16 - 8, (int)(screen_height * 0.02) + rand() % 16 - 8, (int)(screen_width * .8), (int)(screen_height * .96));
+			else if (quake_timer > 128) blit(double_buffer, swap_buffer, 0, 0, (int)(screen_width * 0.0125) + rand() % 8 - 4, (int)(screen_height * 0.02) + rand() % 8 - 4, (int)(screen_width * .8), (int)(screen_height * .96));
+			else if (quake_timer > 64) blit(double_buffer, swap_buffer, 0, 0, (int)(screen_width * 0.0125) + rand() % 4 - 2, (int)(screen_height * 0.02) + rand() % 4 - 2, (int)(screen_width * .8), (int)(screen_height * .96));
+			else blit(double_buffer, swap_buffer, 0, 0, (int)(screen_width * 0.0125) + rand() % 2 - 1, (int)(screen_height * 0.02) + rand() % 2 - 1, (int)(screen_width * .8), (int)(screen_height * .96));
+			set_clip(swap_buffer, 0, 0, screen_width, screen_height);
 		} else {
-			blit(double_buffer, screen, 0, 0, (int)(screen_width * 0.0125), (int)(screen_height * 0.02), (int)(screen_width * .8), (int)(screen_height * .96));
+			blit(double_buffer, swap_buffer, 0, 0, (int)(screen_width * 0.0125), (int)(screen_height * 0.02), (int)(screen_width * .8), (int)(screen_height * .96));
 		}
 	}
 
 	frame_counter++;
 	if (frame_counter > 32768) frame_counter = 32768;
+
+	blit_to_screen(swap_buffer);
 
 	// game_is_running can be changed from under us by update_animations, this
 	// should be fixed but just to be sure put the check for it in the while.

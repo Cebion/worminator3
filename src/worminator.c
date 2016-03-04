@@ -57,6 +57,15 @@
 
 #define WORMINATOR_VERSION "3.0:  Please report bugs!"
 
+void fade_in_pal(void *palette, int delay)
+{
+	set_palette(palette);
+}
+
+void fade_out_pal(int delay)
+{
+}
+
 void blit_to_screen(BITMAP *bmp)
 {
 	acquire_screen();
@@ -2264,20 +2273,20 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_CUTSCENE_01].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 			rest(500);
-			fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(2500);
 			fade_out(8);
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_CUTSCENE_02].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 			rest(500);
-			fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(2500);
 			fade_out(8);
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_CUTSCENE_03].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 			play_sample(worminator_data_file[ROCKET_FIRE_SOUND].dat, 255, 128, 1000, FALSE);
 			rest(500);
-			fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			play_sample(worminator_data_file[MINIGUN_FIRE_SOUND].dat, 255, 128, 1000, FALSE);
 			rest(100);
 			play_sample(worminator_data_file[MINIGUN_FIRE_SOUND].dat, 255, 128, 1000, FALSE);
@@ -2292,7 +2301,7 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_CUTSCENE_04].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 			rest(500);
-			fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(7500);
 			fade_out(8);
 		}
@@ -2300,7 +2309,7 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_CUTSCENE_05].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 			rest(500);
-			fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(7500);
 			fade_out(8);
 		}
@@ -2308,7 +2317,7 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_CUTSCENE_06].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 			rest(500);
-			fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(7500);
 			fade_out(8);
 		}
@@ -2571,7 +2580,7 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 	else hurt_player(0);
 	borders_dirty = TRUE;
 	render_map();
-	fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 32);
+	fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 32);
 
 	// Reset the just_died variable
 	player_just_died = FALSE;
@@ -2679,7 +2688,7 @@ char load_saved_game(char *saved_game_file_name)
 	hurt_player(0);
 	borders_dirty = TRUE;
 	render_map();
-	fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 32);
+	fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 32);
 
 	// Reset the display map and stats variables
 	display_map = FALSE;

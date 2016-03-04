@@ -28,14 +28,14 @@ void play_introduction()
 	// Draw, fade in, rest, and fade out the first frame
 	stretch_blit(worminator_data_file[INTRODUCTION_FRAME_01].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 	rest(1000);
-	fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+	fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 	rest(2500);
 	fade_out(8);
 
 	// Draw, fade in, rest, and fade out the second frame
 	stretch_blit(worminator_data_file[INTRODUCTION_FRAME_02].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 	rest(1000);
-	fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+	fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 	rest(2500);
 	fade_out(8);
 
@@ -227,22 +227,22 @@ void run_scripts()
 			// Show the endgame snapshots
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_01].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			fade_in(worminator_data_file[WORMY_FINALE_PAGE_01_PALLETE].dat, 2);
+			fade_in_pal(worminator_data_file[WORMY_FINALE_PAGE_01_PALLETE].dat, 2);
 			rest(5000);
 			fade_out(2);
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_02].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			fade_in(worminator_data_file[WORMY_FINALE_PAGE_02_PALLETE].dat, 2);
+			fade_in_pal(worminator_data_file[WORMY_FINALE_PAGE_02_PALLETE].dat, 2);
 			rest(5000);
 			fade_out(2);
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_03].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			fade_in(worminator_data_file[WORMY_FINALE_PAGE_03_PALLETE].dat, 2);
+			fade_in_pal(worminator_data_file[WORMY_FINALE_PAGE_03_PALLETE].dat, 2);
 			rest(5000);
 			fade_out(2);
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_04].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			fade_in(worminator_data_file[WORMY_FINALE_PAGE_04_PALLETE].dat, 2);
+			fade_in_pal(worminator_data_file[WORMY_FINALE_PAGE_04_PALLETE].dat, 2);
 			rest(5000);
 			fade_out(2);
 
@@ -251,7 +251,7 @@ void run_scripts()
 			display_snapshot(13, FALSE);	// Famous last words
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_THE_END_OF_IT_ALL].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			fade_in(worminator_data_file[WORMY_THE_END_OF_IT_ALL_PALLETE].dat, 2);
+			fade_in_pal(worminator_data_file[WORMY_THE_END_OF_IT_ALL_PALLETE].dat, 2);
 			rest(10000);
 			fade_out(2);
 
@@ -676,7 +676,7 @@ void run_scripts()
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_CUTSCENE_06].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 			rest(500);
-			fade_in(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			dofinalescroll();
 			fade_out(8);
 
@@ -685,7 +685,7 @@ void run_scripts()
 			display_snapshot(29, FALSE);	// Famous last words
 			set_pallete(black_pallete);
 			stretch_blit(worminator_data_file[WORMY_THE_END_OF_IT_ALL].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			fade_in(worminator_data_file[WORMY_THE_END_OF_IT_ALL_PALLETE].dat, 2);
+			fade_in_pal(worminator_data_file[WORMY_THE_END_OF_IT_ALL_PALLETE].dat, 2);
 			rest(5000);
 			fade_out(2);
 

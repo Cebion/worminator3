@@ -75,19 +75,15 @@ void blit_to_screen(BITMAP *bmp)
 
 void savedisplay()
 {
-	acquire_screen();
 	if (screenbackup != NULL) destroy_bitmap(screenbackup);
 	screenbackup = create_bitmap_ex(8, screen_width, screen_height);
-	blit(screen, screenbackup, 0, 0, 0, 0, screen_width, screen_height);
-	release_screen();
+	blit(swap_buffer, screenbackup, 0, 0, 0, 0, screen_width, screen_height);
 }
 
 void loaddisplay()
 {
 	if (game_is_running || (screenbackup == NULL)) return;
-	acquire_screen();
-	blit(screenbackup, screen, 0, 0, 0, 0, screen_width, screen_height);
-	release_screen();
+	blit(screenbackup, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
 }
 
 void greenify()
@@ -337,7 +333,7 @@ int main(int argc, char *argv[])
 	set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 	stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat,
 		     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
-	blit(swap_buffer, screen, 0, 0, 0, 0, screen_width, screen_height);
+	blit_to_screen(swap_buffer);
 	wormy_menu();
 	add_console_line("Menu terminated.");
 	add_console_line(" ");
@@ -472,7 +468,8 @@ void handle_input()
 	if (recording_demo) {
 		i = 0; write_dword((unsigned int *)&i, demofile);
 		write_bytes((unsigned char *)input_buffer, sizeof(input_buffer), demofile);
-		rotate_sprite(screen, worminator_data_file[WORMINATOR_BFG].dat, 0, 0, itofix(global_timer * 16));
+		rotate_sprite(swap_buffer, worminator_data_file[WORMINATOR_BFG].dat,
+			      0, 0, itofix(global_timer * 16));
 	}
 
 	// Go to the main menu if nessicary and allow for hotkeys
@@ -2246,7 +2243,8 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 	set_pallete(black_pallete);
 
 	// BlackOut the screen
-	rectfill(screen, 0, 0, screen_width, screen_height, 255);
+	rectfill(swap_buffer, 0, 0, screen_width, screen_height, 255);
+	blit_to_screen(swap_buffer);
 
 	// Reset all the sprite states
 	clear_sprites();
@@ -2271,19 +2269,25 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 		}
 		if (current_level == 8) {
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_CUTSCENE_01].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_CUTSCENE_01].dat,
+				     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			rest(500);
 			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(2500);
 			fade_out(8);
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_CUTSCENE_02].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_CUTSCENE_02].dat,
+				     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			rest(500);
 			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(2500);
 			fade_out(8);
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_CUTSCENE_03].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_CUTSCENE_03].dat,
+				     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			play_sample(worminator_data_file[ROCKET_FIRE_SOUND].dat, 255, 128, 1000, FALSE);
 			rest(500);
 			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
@@ -2299,7 +2303,9 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 		}
 		if (current_level == 9) {
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_CUTSCENE_04].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_CUTSCENE_04].dat, 
+				     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			rest(500);
 			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(7500);
@@ -2307,7 +2313,9 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 		}
 		if (current_level == 10) {
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_CUTSCENE_05].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_CUTSCENE_05].dat,
+				     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			rest(500);
 			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(7500);
@@ -2315,7 +2323,9 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 		}
 		if (current_level == 17) {
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_CUTSCENE_06].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_CUTSCENE_06].dat,
+				     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			rest(500);
 			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
 			rest(7500);

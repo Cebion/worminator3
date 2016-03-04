@@ -5,14 +5,6 @@
  * For function descriptions and explanations, see proto.h
  * For a detailed explanation of how the engine works, see
  * the documents that came with this source code package. */
-int fli_callback(void)
-{
-	stretch_blit(screen_buffer, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-	/*if(keypressed())
-	 * return -1;
-	 * else*/
-	return 0;
-}
 
 /***********************\
 |** PLAY INTRODUCTION **|
@@ -23,24 +15,30 @@ void play_introduction()
 	set_pallete(black_pallete);
 
 	// Fill the screen with black
-	rectfill(screen, 0, 0, screen_width, screen_height, 15);
+	rectfill(swap_buffer, 0, 0, screen_width, screen_height, 15);
 
 	// Draw, fade in, rest, and fade out the first frame
-	stretch_blit(worminator_data_file[INTRODUCTION_FRAME_01].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+	stretch_blit(worminator_data_file[INTRODUCTION_FRAME_01].dat,
+		     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+	blit_to_screen(swap_buffer);
 	rest(1000);
 	fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+	blit_to_screen(swap_buffer);
 	rest(2500);
 	fade_out(8);
 
 	// Draw, fade in, rest, and fade out the second frame
-	stretch_blit(worminator_data_file[INTRODUCTION_FRAME_02].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+	stretch_blit(worminator_data_file[INTRODUCTION_FRAME_02].dat,
+		    swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+	blit_to_screen(swap_buffer);
 	rest(1000);
 	fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+	blit_to_screen(swap_buffer);
 	rest(2500);
 	fade_out(8);
 
 	// Fill the screen with black
-	rectfill(screen, 0, 0, screen_width, screen_height, 15);
+	rectfill(swap_buffer, 0, 0, screen_width, screen_height, 15);
 
 	// Reset the pallete to the worminator pallete
 	set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
@@ -226,23 +224,31 @@ void run_scripts()
 
 			// Show the endgame snapshots
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_01].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_01].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			fade_in_pal(worminator_data_file[WORMY_FINALE_PAGE_01_PALLETE].dat, 2);
+			blit_to_screen(swap_buffer);
 			rest(5000);
 			fade_out(2);
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_02].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_02].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			fade_in_pal(worminator_data_file[WORMY_FINALE_PAGE_02_PALLETE].dat, 2);
+			blit_to_screen(swap_buffer);
 			rest(5000);
 			fade_out(2);
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_03].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_03].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			fade_in_pal(worminator_data_file[WORMY_FINALE_PAGE_03_PALLETE].dat, 2);
+			blit_to_screen(swap_buffer);
 			rest(5000);
 			fade_out(2);
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_04].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_FINALE_PAGE_04].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			fade_in_pal(worminator_data_file[WORMY_FINALE_PAGE_04_PALLETE].dat, 2);
+			blit_to_screen(swap_buffer);
 			rest(5000);
 			fade_out(2);
 
@@ -250,14 +256,18 @@ void run_scripts()
 			set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 			display_snapshot(13, FALSE);	// Famous last words
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_THE_END_OF_IT_ALL].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_THE_END_OF_IT_ALL].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			fade_in_pal(worminator_data_file[WORMY_THE_END_OF_IT_ALL_PALLETE].dat, 2);
+			blit_to_screen(swap_buffer);
 			rest(10000);
 			fade_out(2);
 
 			// Restore the main menu again a really cheap way :)
 			set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
-			stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat,
+					swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 
 			// Check for a high score
 			check_high_score();
@@ -287,9 +297,13 @@ void run_scripts()
 		// Rival village elder's message
 		if (worminator_map.info_tile_grid[0][0] == 0 && !playing_demo && !recording_demo && player.x_position_in_pixels + 16 >= 2560 && player.x_position_in_pixels <= 2624 && player.y_position_in_pixels + 16 >= 1616 && player.y_position_in_pixels + 16 <= 1680) {
 			game_is_running = FALSE;
-			masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_01].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_01].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			rest(1000);
-			masked_stretch_blit(worminator_data_file[PRESS_ANY_KEY_MESSAGE].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			masked_stretch_blit(worminator_data_file[PRESS_ANY_KEY_MESSAGE].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			clear_keybuf();
 			while (!keypressed()) {
 			}
@@ -300,29 +314,43 @@ void run_scripts()
 		// Village elder messages
 		if (worminator_map.info_tile_grid[0][0] == 0 && !playing_demo && !recording_demo && player.x_position_in_pixels + 16 >= 3600 && player.x_position_in_pixels <= 3664 && player.y_position_in_pixels + 16 >= 2144 && player.y_position_in_pixels + 16 <= 2208) {
 			game_is_running = FALSE;
-			if (worminator_map.info_tile_grid[2][0] == 1) masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_02].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			if (worminator_map.info_tile_grid[2][0] == 2) masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_03].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			if (worminator_map.info_tile_grid[2][0] == 3) masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_04].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			if (worminator_map.info_tile_grid[2][0] == 4) masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_05].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			if (worminator_map.info_tile_grid[2][0] == 1)
+				masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_02].dat,
+						swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			if (worminator_map.info_tile_grid[2][0] == 2)
+				masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_03].dat,
+						swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			if (worminator_map.info_tile_grid[2][0] == 3)
+				masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_04].dat,
+						swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			if (worminator_map.info_tile_grid[2][0] == 4)
+				masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_05].dat,
+						swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			rest(1000);
-			masked_stretch_blit(worminator_data_file[PRESS_ANY_KEY_MESSAGE].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			masked_stretch_blit(worminator_data_file[PRESS_ANY_KEY_MESSAGE].dat,
+				swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			clear_keybuf();
-			while (!keypressed()) {
-			}
+			while (!keypressed());
 			worminator_map.info_tile_grid[0][0] = 1;
-			if (worminator_map.info_tile_grid[2][0] == 1) worminator_map.info_tile_grid[2][0] = 2;	// Change the village elder message
+			if (worminator_map.info_tile_grid[2][0] == 1)
+				worminator_map.info_tile_grid[2][0] = 2;	// Change the village elder message
 			game_is_running = TRUE;
 		}
 
 		// Surf shop owner's message
 		if (worminator_map.info_tile_grid[3][0] == 0 && !playing_demo && !recording_demo && player.x_position_in_pixels + 16 >= 384 && player.x_position_in_pixels <= 448 && player.y_position_in_pixels + 16 >= 2752 && player.y_position_in_pixels + 16 <= 2816) {
 			game_is_running = FALSE;
-			masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_06].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			masked_stretch_blit(worminator_data_file[STOMACH_LEVEL_MESSAGE_06].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			rest(1000);
-			masked_stretch_blit(worminator_data_file[PRESS_ANY_KEY_MESSAGE].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			masked_stretch_blit(worminator_data_file[PRESS_ANY_KEY_MESSAGE].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 			clear_keybuf();
-			while (!keypressed()) {
-			}
+			while (!keypressed());
 			worminator_map.info_tile_grid[3][0] = 1;
 			game_is_running = TRUE;
 		}
@@ -674,9 +702,11 @@ void run_scripts()
 
 			// Show the dead worm background
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_CUTSCENE_06].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
-			rest(500);
+			stretch_blit(worminator_data_file[WORMY_CUTSCENE_06].dat,
+					swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 			fade_in_pal(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat, 8);
+			blit_to_screen(swap_buffer);
+			rest(500);
 			dofinalescroll();
 			fade_out(8);
 
@@ -684,14 +714,18 @@ void run_scripts()
 			set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 			display_snapshot(29, FALSE);	// Famous last words
 			set_pallete(black_pallete);
-			stretch_blit(worminator_data_file[WORMY_THE_END_OF_IT_ALL].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[WORMY_THE_END_OF_IT_ALL].dat,
+					swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			fade_in_pal(worminator_data_file[WORMY_THE_END_OF_IT_ALL_PALLETE].dat, 2);
+			blit_to_screen(swap_buffer);
 			rest(5000);
 			fade_out(2);
 
 			// Restore the main menu again a really cheap way :)
 			set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
-			stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat,
+					swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			blit_to_screen(swap_buffer);
 
 			// Check for a high score
 			check_high_score();

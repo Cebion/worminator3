@@ -188,9 +188,10 @@ void wormy_menu()
 	//set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 
 	// Draw in the wormy menu bar and show the mouse
-	draw_sprite(screen, worminator_data_file[WORMY_MENU_BAR].dat, 0, 0);
+	draw_sprite(swap_buffer, worminator_data_file[WORMY_MENU_BAR].dat, 0, 0);
 	savedisplay();
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	// This is the core menu loop
 	do {
@@ -201,9 +202,10 @@ void wormy_menu()
 			if (mouse_x >= 8 && mouse_x <= 50 && mouse_y >= 4 && mouse_y <= 17) {
 				// Backup what is currently where the new menu will be and then draw the menu
 				show_mouse(NULL);
-				blit(screen, backup_bitmap, 12, 20, 0, 0, 80, 176);
-				draw_sprite(screen, worminator_data_file[WORMY_GAME_MENU].dat, 12, 20);
+				blit(swap_buffer, backup_bitmap, 12, 20, 0, 0, 80, 176);
+				draw_sprite(swap_buffer, worminator_data_file[WORMY_GAME_MENU].dat, 12, 20);
 				savedisplay();
+				blit_to_screen(swap_buffer);
 				show_mouse(screen);
 
 				// Begin game submenu loop
@@ -214,9 +216,10 @@ void wormy_menu()
 						char close_subsubmenu = FALSE;
 						// Backup what is currently where the new menu will be and then draw the submenu
 						show_mouse(NULL);
-						blit(screen, backup_bitmap, 92, 20, 92, 20, 80, 64);
-						draw_sprite(screen, worminator_data_file[WORMY_NEW_GAME_SUBMENU].dat, 92, 20);
+						blit(swap_buffer, backup_bitmap, 92, 20, 92, 20, 80, 64);
+						draw_sprite(swap_buffer, worminator_data_file[WORMY_NEW_GAME_SUBMENU].dat, 92, 20);
 						savedisplay();
+						blit_to_screen(swap_buffer);
 						show_mouse(screen);
 						/* Close the submenu we are a subsubmenu of
 						 * once we (the subsubmenu) are done */
@@ -259,8 +262,9 @@ void wormy_menu()
 						} while (close_subsubmenu == FALSE);
 						// Clean up this sub menu
 						show_mouse(NULL);
-						blit(backup_bitmap, screen, 92, 20, 92, 20, 80, 64);
+						blit(backup_bitmap, swap_buffer, 92, 20, 92, 20, 80, 64);
 						savedisplay();
+						blit_to_screen(swap_buffer);
 						show_mouse(screen);
 					}
 					// Load game submenu button
@@ -296,7 +300,7 @@ void wormy_menu()
 					else if (region_clicked_notran(37, 102, 74, 112) == TRUE) {
 						wormy_options_menu();
 						if (current_level == -69) {
-							stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+							stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat, swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
 						} else {
 							// Set screen position
 							screen_x_position = (int)(player.x_position_in_pixels - ((int)(screen_width * .8) / 2) + 16);
@@ -311,9 +315,10 @@ void wormy_menu()
 							stats_dirty = TRUE;
 							render_map();
 						}
-						draw_sprite(screen, worminator_data_file[WORMY_MENU_BAR].dat, 0, 0);
-						blit(screen, backup_bitmap, 12, 20, 0, 0, 80, 96);
+						draw_sprite(swap_buffer, worminator_data_file[WORMY_MENU_BAR].dat, 0, 0);
+						blit(swap_buffer, backup_bitmap, 12, 20, 0, 0, 80, 96);
 						savedisplay();
+						blit_to_screen(swap_buffer);
 						show_mouse(screen);
 						close_submenu = TRUE;
 					}
@@ -338,10 +343,12 @@ void wormy_menu()
 							/* play_a_demo returns non-0 if the gamestate was changed / messed up,
 							 * in this case restore the initial menu screen / setup. */
 							if (play_a_demo()) {
-								stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
-								draw_sprite(screen, worminator_data_file[WORMY_MENU_BAR].dat, 0, 0);
-								blit(screen, backup_bitmap, 12, 20, 0, 0, 80, 176);
+								stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat,
+									     swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+								draw_sprite(swap_buffer, worminator_data_file[WORMY_MENU_BAR].dat, 0, 0);
+								blit(swap_buffer, backup_bitmap, 12, 20, 0, 0, 80, 176);
 								savedisplay();
+								blit_to_screen(swap_buffer);
 								show_mouse(screen);
 								current_level = -69;
 								midi_pause();
@@ -372,13 +379,15 @@ void wormy_menu()
 					}
 
 					if (idle_speed_counter == 0) rest(1);
+					blit_to_screen(swap_buffer);
 				} while (close_submenu == FALSE);
 
 				// Clean up this sub menu
 				show_mouse(NULL);
-				blit(backup_bitmap, screen, 0, 0, 12, 20, 80, 176);
+				blit(backup_bitmap, swap_buffer, 0, 0, 12, 20, 80, 176);
 				savedisplay();
 				show_mouse(screen);
+				blit_to_screen(swap_buffer);
 				close_submenu = FALSE;
 				idle_counter = 0;
 			}
@@ -389,10 +398,11 @@ void wormy_menu()
 			if (mouse_x >= 68 && mouse_x <= 95 && mouse_y >= 6 && mouse_y <= 18) {
 				// Backup what is currently where the new menu will be and then draw the menu
 				show_mouse(NULL);
-				blit(screen, backup_bitmap, 64, 21, 0, 0, 256, 160);
-				draw_sprite(screen, worminator_data_file[WORMY_SKINS_MENU].dat, 64, 21);
+				blit(swap_buffer, backup_bitmap, 64, 21, 0, 0, 256, 160);
+				draw_sprite(swap_buffer, worminator_data_file[WORMY_SKINS_MENU].dat, 64, 21);
 				savedisplay();
 				show_mouse(screen);
+				blit_to_screen(swap_buffer);
 
 				// Begin game submenu loop
 				do {
@@ -563,13 +573,15 @@ void wormy_menu()
 						 * if (mouse_x < 64 || mouse_x > 320 || mouse_y < 21 || mouse_y > 180) */close_submenu = TRUE;
 					}
 					if (idle_speed_counter == 0) rest(1);
+					blit_to_screen(swap_buffer);
 				} while (close_submenu == FALSE);
 
 				// Clean up this sub menu
 				show_mouse(NULL);
-				blit(backup_bitmap, screen, 0, 0, 64, 21, 256, 160);
+				blit(backup_bitmap, swap_buffer, 0, 0, 64, 21, 256, 160);
 				savedisplay();
 				show_mouse(screen);
+				blit_to_screen(swap_buffer);
 				close_submenu = FALSE;
 				idle_counter = 0;
 
@@ -583,10 +595,11 @@ void wormy_menu()
 			if (mouse_x >= 116 && mouse_x <= 137 && mouse_y >= 4 && mouse_y <= 16) {
 				// Backup what is currently where the new menu will be and then draw the menu
 				show_mouse(NULL);
-				blit(screen, backup_bitmap, 119, 18, 0, 0, 64, 128);
-				draw_sprite(screen, worminator_data_file[WORMY_HELP_MENU].dat, 119, 18);
+				blit(swap_buffer, backup_bitmap, 119, 18, 0, 0, 64, 128);
+				draw_sprite(swap_buffer, worminator_data_file[WORMY_HELP_MENU].dat, 119, 18);
 				savedisplay();
 				show_mouse(screen);
+				blit_to_screen(swap_buffer);
 
 				// Begin help submenu loop
 				do {
@@ -653,13 +666,15 @@ void wormy_menu()
 						 * if (mouse_x < 119 || mouse_x > 182 || mouse_y < 18 || mouse_y > 145) */close_submenu = TRUE;
 					}
 					if (idle_speed_counter == 0) rest(1);
+					blit_to_screen(swap_buffer);
 				} while (close_submenu == FALSE);
 
 				// Clean up this sub menu
 				show_mouse(NULL);
-				blit(backup_bitmap, screen, 0, 0, 119, 18, 64, 128);
+				blit(backup_bitmap, swap_buffer, 0, 0, 119, 18, 64, 128);
 				savedisplay();
 				show_mouse(screen);
+				blit_to_screen(swap_buffer);
 				close_submenu = FALSE;
 				idle_counter = 0;
 			}
@@ -670,20 +685,39 @@ void wormy_menu()
 			if (mouse_x >= 176 && mouse_x <= 210 && mouse_y >= 3 && mouse_y <= 14) {
 				// Backup what is currently where the new menu will be and then draw the menu
 				show_mouse(NULL);
-				draw_sprite(screen, worminator_data_file[WORMY_MENU_BAR_SHOW_CHEATS].dat, 0, 0);
-				blit(screen, backup_bitmap, 177, 18, 0, 0, 128, 160);
-				draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-				if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-				if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-				if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-				if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-				if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-				if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-				if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-				if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-				if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+				draw_sprite(swap_buffer, worminator_data_file[WORMY_MENU_BAR_SHOW_CHEATS].dat, 0, 0);
+				blit(swap_buffer, backup_bitmap, 177, 18, 0, 0, 128, 160);
+				draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+				if (wormy_config.godly_mode == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 25, 8, 8);
+				if (wormy_config.freeze_mode == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 40, 8, 8);
+				if (wormy_config.rapid_fire_mode == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 56, 8, 8);
+				if (wormy_config.fly_mode == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 71, 8, 8);
+				if (wormy_config.wealth_mode == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 86, 8, 8);
+				if (wormy_config.super_turkey_mode == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 101, 8, 8);
+				if (wormy_config.ekg_mode == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 116, 8, 8);
+				if (wormy_config.cool_mode == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 131, 8, 8);
+				if (show_fps == TRUE)
+					blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat,
+						swap_buffer, 8, 0, 291, 163, 8, 8);
 				savedisplay();
 				show_mouse(screen);
+				blit_to_screen(swap_buffer);
 
 				// Begin help submenu loop
 				do {
@@ -695,16 +729,16 @@ void wormy_menu()
 							if (wormy_config.godly_mode == TRUE) wormy_config.godly_mode = FALSE;
 							else wormy_config.godly_mode = TRUE;
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -716,16 +750,16 @@ void wormy_menu()
 							if (wormy_config.freeze_mode == TRUE) wormy_config.freeze_mode = FALSE;
 							else wormy_config.freeze_mode = TRUE;
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -737,16 +771,16 @@ void wormy_menu()
 							if (wormy_config.rapid_fire_mode == TRUE) wormy_config.rapid_fire_mode = FALSE;
 							else wormy_config.rapid_fire_mode = TRUE;
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -758,16 +792,16 @@ void wormy_menu()
 							if (wormy_config.fly_mode == TRUE) wormy_config.fly_mode = FALSE;
 							else wormy_config.fly_mode = TRUE;
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -779,16 +813,16 @@ void wormy_menu()
 							if (wormy_config.wealth_mode == TRUE) wormy_config.wealth_mode = FALSE;
 							else wormy_config.wealth_mode = TRUE;
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -811,16 +845,16 @@ void wormy_menu()
 								}
 							}
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -832,16 +866,16 @@ void wormy_menu()
 							if (wormy_config.ekg_mode == TRUE) wormy_config.ekg_mode = FALSE;
 							else wormy_config.ekg_mode = TRUE;
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -863,16 +897,16 @@ void wormy_menu()
 								 * reset_sound();
 								 * midi_pause();*/
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -884,16 +918,16 @@ void wormy_menu()
 							if (show_fps == TRUE) show_fps = FALSE;
 							else show_fps = TRUE;
 							show_mouse(NULL);
-							draw_sprite(screen, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
-							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 25, 8, 8);
-							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 40, 8, 8);
-							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 56, 8, 8);
-							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 71, 8, 8);
-							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 86, 8, 8);
-							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 101, 8, 8);
-							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 116, 8, 8);
-							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 131, 8, 8);
-							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, screen, 8, 0, 291, 163, 8, 8);
+							draw_sprite(swap_buffer, worminator_data_file[WORMY_CHEATS_MENU].dat, 177, 18);
+							if (wormy_config.godly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 25, 8, 8);
+							if (wormy_config.freeze_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 40, 8, 8);
+							if (wormy_config.rapid_fire_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 56, 8, 8);
+							if (wormy_config.fly_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 71, 8, 8);
+							if (wormy_config.wealth_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 86, 8, 8);
+							if (wormy_config.super_turkey_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 101, 8, 8);
+							if (wormy_config.ekg_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 116, 8, 8);
+							if (wormy_config.cool_mode == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 131, 8, 8);
+							if (show_fps == TRUE) blit(worminator_data_file[WORMY_OPTIONS_MENU_GLOW_PATCH].dat, swap_buffer, 8, 0, 291, 163, 8, 8);
 							savedisplay();
 							show_mouse(screen);
 						}
@@ -904,13 +938,15 @@ void wormy_menu()
 						 * if (mouse_x < 177 || mouse_x > 304 || mouse_y < 18 || mouse_y > 145) */close_submenu = TRUE;
 					}
 					if (idle_speed_counter == 0) rest(1);
+					blit_to_screen(swap_buffer);
 				} while (close_submenu == FALSE);
 
 				// Clean up this sub menu
 				show_mouse(NULL);
-				blit(backup_bitmap, screen, 0, 0, 177, 18, 128, 160);
+				blit(backup_bitmap, swap_buffer, 0, 0, 177, 18, 128, 160);
 				savedisplay();
 				show_mouse(screen);
+				blit_to_screen(swap_buffer);
 				close_submenu = FALSE;
 				idle_counter = 0;
 			}
@@ -939,11 +975,12 @@ void wormy_menu()
 			if (demo_number == 1) play_demo("demo1.dem");
 			else if (demo_number == 2) play_demo("demo2.dem");
 			else play_demo("demo3.dem");
-			stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat, screen, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
-			draw_sprite(screen, worminator_data_file[WORMY_MENU_BAR].dat, 0, 0);
-			blit(screen, backup_bitmap, 12, 20, 0, 0, 80, 96);
+			stretch_blit(worminator_data_file[MAIN_TITLE_SCREEN].dat, swap_buffer, 0, 0, 640, 480, 0, 0, screen_width, screen_height);
+			draw_sprite(swap_buffer, worminator_data_file[WORMY_MENU_BAR].dat, 0, 0);
+			blit(swap_buffer, backup_bitmap, 12, 20, 0, 0, 80, 96);
 			savedisplay();
 			show_mouse(screen);
+			blit_to_screen(swap_buffer);
 			idle_counter = 0;
 			current_level = -69;
 			demo_number++;
@@ -954,6 +991,7 @@ void wormy_menu()
 		}
 
 		if (idle_speed_counter == 0) rest(1);
+		blit_to_screen(swap_buffer);
 	} while (close_menu == FALSE);
 
 	// Hide the mouse pointer and refresh the display
@@ -1047,10 +1085,11 @@ void wormy_options_menu()
 			sprintf(message, "%-3d", wormy_config.sound_volume);
 			textout(temp_buffer, worminator_data_file[SMALL_NUMBERS_FONT].dat, message, 280, 46, -1);
 
-			// Draw on the final screen, and display mouse
-			stretch_blit(temp_buffer, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			// Draw on the final swap_buffer, and display mouse
+			stretch_blit(temp_buffer, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			savedisplay();
 			show_mouse(screen);
+			blit_to_screen(swap_buffer);
 
 			// Make sure that we don't endlessly redraw.
 			redraw_options_menu = FALSE;
@@ -1061,9 +1100,10 @@ void wormy_options_menu()
 			// Drop down the menu
 			show_mouse(NULL);
 			blit(worminator_data_file[WORMY_OPTIONS_MENU_RESOLUTION_DROPDOWN].dat, temp_buffer, 0, 0, 99, 44, 92, 103);
-			stretch_blit(temp_buffer, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(temp_buffer, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			savedisplay();
 			show_mouse(screen);
+			blit_to_screen(swap_buffer);
 
 			// Begin the resolution dropdown loop
 			do {
@@ -1107,9 +1147,10 @@ void wormy_options_menu()
 			// Drop down the menu
 			show_mouse(NULL);
 			blit(worminator_data_file[WORMY_OPTIONS_MENU_GAME_SPEED_DROPDOWN].dat, temp_buffer, 0, 0, 99, 60, 92, 56);
-			stretch_blit(temp_buffer, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(temp_buffer, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			savedisplay();
 			show_mouse(screen);
+			blit_to_screen(swap_buffer);
 
 			// Begin the resolution dropdown loop
 			do {
@@ -1141,9 +1182,10 @@ void wormy_options_menu()
 			// Drop down the menu
 			show_mouse(NULL);
 			blit(worminator_data_file[WORMY_OPTIONS_MENU_DIFFICULTY_DROPDOWN].dat, temp_buffer, 0, 0, 99, 76, 92, 56);
-			stretch_blit(temp_buffer, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			stretch_blit(temp_buffer, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			savedisplay();
 			show_mouse(screen);
+			blit_to_screen(swap_buffer);
 
 			// Begin the resolution dropdown loop
 			do {
@@ -1361,14 +1403,14 @@ char start_new_custom_game()
 
 	// Back up existing screen
 	show_mouse(NULL);
-	blit(screen, backup_bitmap, 0, 0, 0, 0, 320, 200);
+	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, 320, 200);
 
 	if (file_select_ex("Select a map data file (.map files)", file_name, "map", sizeof(file_name), 0, 0) != 0)
 		retval = load_map(-1, file_name, 1);
 
 	// Restore the previous screen and mouse pointer display
 	show_mouse(NULL);
-	draw_sprite(screen, backup_bitmap, 0, 0);
+	draw_sprite(swap_buffer, backup_bitmap, 0, 0);
 	destroy_bitmap(backup_bitmap);
 	return retval;
 }
@@ -1389,14 +1431,14 @@ char play_a_demo()
 
 	// Back up existing screen
 	show_mouse(NULL);
-	blit(screen, backup_bitmap, 0, 0, 0, 0, 320, 200);
+	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, 320, 200);
 
 	if (file_select_ex("Select a demo to play (.dem files)", file_name, "dem", sizeof(file_name), 0, 0) != 0)
 		retval = play_demo(file_name);
 
 	// Restore the previous screen and mouse pointer display
 	show_mouse(NULL);
-	draw_sprite(screen, backup_bitmap, 0, 0);
+	draw_sprite(swap_buffer, backup_bitmap, 0, 0);
 	destroy_bitmap(backup_bitmap);
 	return retval;
 }
@@ -1411,14 +1453,14 @@ void record_a_demo()
 
 	// Back up existing screen
 	show_mouse(NULL);
-	blit(screen, backup_bitmap, 0, 0, 0, 0, 320, 200);
+	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, 320, 200);
 
 	if (file_select_ex("Save demo as (.dem files)", file_name, "dem", sizeof(file_name), 0, 0) != 0)
 		start_demo_recording(file_name);
 
 	// Restore the previous screen and mouse pointer display
 	show_mouse(NULL);
-	draw_sprite(screen, backup_bitmap, 0, 0);
+	draw_sprite(swap_buffer, backup_bitmap, 0, 0);
 	destroy_bitmap(backup_bitmap);
 }
 
@@ -1434,17 +1476,18 @@ char wormy_dummy_box(char dummy_question_patch_number, char show_mouse_pointer)
 	game_is_running = FALSE;
 
 	// Back up existing area under the dummy box
-	blit(screen, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32, 0, 0, 128, 64);
+	blit(swap_buffer, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32, 0, 0, 128, 64);
 
 	// Draw in the wormy dummy box along with its patch, and then show the mouse pointer
 	show_mouse(NULL);
-	draw_sprite(screen, worminator_data_file[WORMY_DUMMY_BOX].dat, (screen_width / 2) - 64, (screen_height / 2) - 32);
-	if (dummy_question_patch_number == 0) draw_sprite(screen, worminator_data_file[WORMY_DUMMY_BOX_EXIT_GAME_PATCH].dat, (screen_width / 2) - 48, (screen_height / 2) - 16);
-	else if (dummy_question_patch_number == 1) draw_sprite(screen, worminator_data_file[WORMY_DUMMY_BOX_LOAD_GAME_PATCH].dat, (screen_width / 2) - 48, (screen_height / 2) - 16);
-	else if (dummy_question_patch_number == 2) draw_sprite(screen, worminator_data_file[WORMY_DUMMY_BOX_NEW_GAME_PATCH].dat, (screen_width / 2) - 48, (screen_height / 2) - 16);
-	else if (dummy_question_patch_number == 3) draw_sprite(screen, worminator_data_file[WORMY_DUMMY_BOX_SAVE_GAME_PATCH].dat, (screen_width / 2) - 48, (screen_height / 2) - 16);
+	draw_sprite(swap_buffer, worminator_data_file[WORMY_DUMMY_BOX].dat, (screen_width / 2) - 64, (screen_height / 2) - 32);
+	if (dummy_question_patch_number == 0) draw_sprite(swap_buffer, worminator_data_file[WORMY_DUMMY_BOX_EXIT_GAME_PATCH].dat, (screen_width / 2) - 48, (screen_height / 2) - 16);
+	else if (dummy_question_patch_number == 1) draw_sprite(swap_buffer, worminator_data_file[WORMY_DUMMY_BOX_LOAD_GAME_PATCH].dat, (screen_width / 2) - 48, (screen_height / 2) - 16);
+	else if (dummy_question_patch_number == 2) draw_sprite(swap_buffer, worminator_data_file[WORMY_DUMMY_BOX_NEW_GAME_PATCH].dat, (screen_width / 2) - 48, (screen_height / 2) - 16);
+	else if (dummy_question_patch_number == 3) draw_sprite(swap_buffer, worminator_data_file[WORMY_DUMMY_BOX_SAVE_GAME_PATCH].dat, (screen_width / 2) - 48, (screen_height / 2) - 16);
 	savedisplay();
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	// This is the core dummy box loop
 	do {
@@ -1454,7 +1497,7 @@ char wormy_dummy_box(char dummy_question_patch_number, char show_mouse_pointer)
 			while (mouse_b & 1);
 			if (mouse_x >= (screen_width / 2) - 47 && mouse_x <= (screen_width / 2) - 14 && mouse_y >= (screen_height / 2) + 12 && mouse_y <= (screen_height / 2) + 28) {
 				show_mouse(NULL);
-				draw_sprite(screen, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32);
+				draw_sprite(swap_buffer, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32);
 				if (show_mouse_pointer == TRUE) show_mouse(screen);
 				destroy_bitmap(backup_bitmap);
 				return TRUE;
@@ -1465,7 +1508,7 @@ char wormy_dummy_box(char dummy_question_patch_number, char show_mouse_pointer)
 		if (key[KEY_Y]) {
 			while (key[KEY_Y]);
 			show_mouse(NULL);
-			draw_sprite(screen, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32);
+			draw_sprite(swap_buffer, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32);
 			if (show_mouse_pointer == TRUE) show_mouse(screen);
 			destroy_bitmap(backup_bitmap);
 			return TRUE;
@@ -1475,7 +1518,7 @@ char wormy_dummy_box(char dummy_question_patch_number, char show_mouse_pointer)
 			while (mouse_b & 1);
 			if (mouse_x >= (screen_width / 2) + 12 && mouse_x <= (screen_width / 2) + 45 && mouse_y >= (screen_height / 2) + 11 && mouse_y <= (screen_height / 2) + 27) {
 				show_mouse(NULL);
-				draw_sprite(screen, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32);
+				draw_sprite(swap_buffer, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32);
 				if (show_mouse_pointer == TRUE) show_mouse(screen);
 				destroy_bitmap(backup_bitmap);
 				return FALSE;
@@ -1486,11 +1529,12 @@ char wormy_dummy_box(char dummy_question_patch_number, char show_mouse_pointer)
 		if (key[KEY_N]) {
 			while (key[KEY_N]);
 			show_mouse(NULL);
-			draw_sprite(screen, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32);
+			draw_sprite(swap_buffer, backup_bitmap, (screen_width / 2) - 64, (screen_height / 2) - 32);
 			if (show_mouse_pointer == TRUE) show_mouse(screen);
 			destroy_bitmap(backup_bitmap);
 			return FALSE;
 		}
+		blit_to_screen(swap_buffer);
 		if (idle_speed_counter == 0) rest(1);
 	} while (close_dummy_box == FALSE);
 
@@ -1514,37 +1558,37 @@ void display_snapshot(char snapshot_number, char show_mouse_pointer)
 
 	// Back up existing screen
 	show_mouse(NULL);
-	blit(screen, backup_bitmap, 0, 0, 0, 0, screen_width, screen_height);
+	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, screen_width, screen_height);
 
 	// Draw the snapshot
 	if (snapshot_number == 0) {
-		stretch_blit(worminator_data_file[WORMY_GENERAL_HELP].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_GENERAL_HELP].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 1) {
-		stretch_blit(worminator_data_file[WORMY_ENEMIES_HELP].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_ENEMIES_HELP].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 2) {
-		stretch_blit(worminator_data_file[WORMY_WEAPONS_HELP].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_WEAPONS_HELP].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 3) {
-		stretch_blit(worminator_data_file[WORMY_CREDITS_HELP].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_CREDITS_HELP].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 4) {
-		stretch_blit(worminator_data_file[WORMY_CONTROLS_HELP].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_CONTROLS_HELP].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 5) {
-		stretch_blit(worminator_data_file[WORMY_ABOUT_HELP].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_ABOUT_HELP].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 6) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_01_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_01_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 7) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_02_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_02_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 8) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_03_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_03_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 9) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_04_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_04_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 10) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_05_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_05_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 11) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_06_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_06_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 12) {
-		stretch_blit(worminator_data_file[WORMY_ENDING_MESSAGE].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_ENDING_MESSAGE].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 13) {
-		stretch_blit(worminator_data_file[WORMY_FAMOUS_LAST_WORDS].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_FAMOUS_LAST_WORDS].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 14) {
 		blit(worminator_data_file[WORMY_HIGH_SCORES].dat, buffer_bitmap, 0, 0, 0, 0, 320, 200);
 		for (i = 0; i < 10; i++) {
@@ -1553,40 +1597,41 @@ void display_snapshot(char snapshot_number, char show_mouse_pointer)
 			sprintf(buf, "- %i", wormy_config.high_scores[i]);
 			textout(buffer_bitmap, font, buf, 45 + 134, 40 + 12 * i, makecol(0, 0, 0));
 		}
-		stretch_blit(buffer_bitmap, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(buffer_bitmap, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 15) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_07_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_07_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 16) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_08_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_08_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 17) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_09_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_09_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 18) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_10_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_10_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 19) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_11_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_11_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 20) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_12_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_12_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 21) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_13_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_13_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 22) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_14_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_14_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 23) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_15_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_15_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 24) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_16_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_16_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 25) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_17_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_17_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 26) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_18_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_18_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 27) {
-		stretch_blit(worminator_data_file[WORMY_LEVEL_19_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_LEVEL_19_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 28) {
-		stretch_blit(worminator_data_file[WORMY_CRAPATANA_BRIEFING].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_CRAPATANA_BRIEFING].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	} else if (snapshot_number == 29) {
-		stretch_blit(worminator_data_file[WORMY_GOODBYE_MESSAGE].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+		stretch_blit(worminator_data_file[WORMY_GOODBYE_MESSAGE].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	}
 	savedisplay();
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	// This is the core snapshot loop
 	do {
@@ -1608,7 +1653,7 @@ void display_snapshot(char snapshot_number, char show_mouse_pointer)
 
 	// Restore the previous screen and moust pointer display
 	show_mouse(NULL);
-	blit(backup_bitmap, screen, 0, 0, 0, 0, screen_width, screen_height);
+	blit(backup_bitmap, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
 	if (show_mouse_pointer == TRUE) show_mouse(screen);
 	destroy_bitmap(backup_bitmap);
 	destroy_bitmap(buffer_bitmap);
@@ -1629,12 +1674,13 @@ void display_story(char show_mouse_pointer)
 
 	// Back up existing screen
 	show_mouse(NULL);
-	blit(screen, backup_bitmap, 0, 0, 0, 0, screen_width, screen_height);
+	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, screen_width, screen_height);
 
 	// Draw the current story screen
-	stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+	stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	savedisplay();
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	// This is the core story loop
 	do {
@@ -1648,7 +1694,7 @@ void display_story(char show_mouse_pointer)
 				if (story_page_number < 0) story_page_number = 0;
 				show_mouse(NULL);
 				stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-				do_radial_wipe(screen, temp_buffer, 0, 0, 1, 5, 0);
+				do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 				savedisplay();
 				show_mouse(screen);
 			}
@@ -1662,7 +1708,7 @@ void display_story(char show_mouse_pointer)
 			if (story_page_number < 0) story_page_number = 0;
 			show_mouse(NULL);
 			stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			do_radial_wipe(screen, temp_buffer, 0, 0, 1, 5, 0);
+			do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 			savedisplay();
 			show_mouse(screen);
 		}
@@ -1676,7 +1722,7 @@ void display_story(char show_mouse_pointer)
 				if (story_page_number > 3) story_page_number = 3;
 				show_mouse(NULL);
 				stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-				do_radial_wipe(screen, temp_buffer, 0, 0, 1, 5, 0);
+				do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 				savedisplay();
 				show_mouse(screen);
 			}
@@ -1690,7 +1736,7 @@ void display_story(char show_mouse_pointer)
 			if (story_page_number > 3) story_page_number = 3;
 			show_mouse(NULL);
 			stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			do_radial_wipe(screen, temp_buffer, 0, 0, 1, 5, 0);
+			do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 			savedisplay();
 			show_mouse(screen);
 			play_sample(worminator_data_file[PAGE_TURN_SOUND].dat, 255, 128, 1000, FALSE);
@@ -1709,11 +1755,12 @@ void display_story(char show_mouse_pointer)
 		}
 
 		if (idle_speed_counter == 0) rest(1);
+		blit_to_screen(swap_buffer);
 	} while (close_story == FALSE);
 
 	// Restore the previous screen and moust pointer display
 	show_mouse(NULL);
-	blit(backup_bitmap, screen, 0, 0, 0, 0, screen_width, screen_height);
+	blit(backup_bitmap, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
 	savedisplay();
 	if (show_mouse_pointer == TRUE) show_mouse(screen);
 	destroy_bitmap(backup_bitmap);
@@ -1735,12 +1782,13 @@ void display_recap(char show_mouse_pointer)
 
 	// Back up existing screen
 	show_mouse(NULL);
-	blit(screen, backup_bitmap, 0, 0, 0, 0, screen_width, screen_height);
+	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, screen_width, screen_height);
 
 	// Draw the current story screen
-	stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01].dat, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+	stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	savedisplay();
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	// This is the core story loop
 	do {
@@ -1754,7 +1802,7 @@ void display_recap(char show_mouse_pointer)
 				if (story_page_number < 0) story_page_number = 0;
 				show_mouse(NULL);
 				stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-				do_radial_wipe(screen, temp_buffer, 0, 0, 1, 5, 0);
+				do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 				savedisplay();
 				show_mouse(screen);
 			}
@@ -1768,7 +1816,7 @@ void display_recap(char show_mouse_pointer)
 			if (story_page_number < 0) story_page_number = 0;
 			show_mouse(NULL);
 			stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			do_radial_wipe(screen, temp_buffer, 0, 0, 1, 5, 0);
+			do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 			savedisplay();
 			show_mouse(screen);
 		}
@@ -1782,7 +1830,7 @@ void display_recap(char show_mouse_pointer)
 				if (story_page_number > 1) story_page_number = 1;
 				show_mouse(NULL);
 				stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-				do_radial_wipe(screen, temp_buffer, 0, 0, 1, 5, 0);
+				do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 				savedisplay();
 				show_mouse(screen);
 			}
@@ -1796,7 +1844,7 @@ void display_recap(char show_mouse_pointer)
 			if (story_page_number > 1) story_page_number = 1;
 			show_mouse(NULL);
 			stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-			do_radial_wipe(screen, temp_buffer, 0, 0, 1, 5, 0);
+			do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 			savedisplay();
 			show_mouse(screen);
 			play_sample(worminator_data_file[PAGE_TURN_SOUND].dat, 255, 128, 1000, FALSE);
@@ -1815,11 +1863,12 @@ void display_recap(char show_mouse_pointer)
 		}
 
 		if (idle_speed_counter == 0) rest(1);
+		blit_to_screen(swap_buffer);
 	} while (close_story == FALSE);
 
 	// Restore the previous screen and moust pointer display
 	show_mouse(NULL);
-	blit(backup_bitmap, screen, 0, 0, 0, 0, screen_width, screen_height);
+	blit(backup_bitmap, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
 	savedisplay();
 	if (show_mouse_pointer == TRUE) show_mouse(screen);
 	destroy_bitmap(backup_bitmap);
@@ -1861,7 +1910,7 @@ void get_highscore_name(int position)
 	char done = FALSE;
 
 	// Backup the and initialize the buffer
-	blit(screen, backup, (screen_width / 2) - 64, (screen_height / 2) - 32, 0, 0, 128, 64);
+	blit(swap_buffer, backup, (screen_width / 2) - 64, (screen_height / 2) - 32, 0, 0, 128, 64);
 	blit(worminator_data_file[WORMY_HIGH_SCORE_INPUT_BOX].dat, buffer, 0, 0, 0, 0, 128, 64);
 	savedisplay();
 
@@ -1870,7 +1919,7 @@ void get_highscore_name(int position)
 	pos = 0;
 
 	// Draw the input box on screen
-	draw_sprite(screen, buffer, (screen_width / 2) - 64, (screen_height / 2) - 32);
+	draw_sprite(swap_buffer, buffer, (screen_width / 2) - 64, (screen_height / 2) - 32);
 
 	// Accept input
 	while (!done) {
@@ -1895,7 +1944,7 @@ void get_highscore_name(int position)
 		}
 		blit(worminator_data_file[WORMY_HIGH_SCORE_INPUT_BOX].dat, buffer, 0, 0, 0, 0, 128, 64);
 		textout(buffer, font, input, 6, 49, 5);
-		draw_sprite(screen, buffer, (screen_width / 2) - 64, (screen_height / 2) - 32);
+		draw_sprite(swap_buffer, buffer, (screen_width / 2) - 64, (screen_height / 2) - 32);
 		savedisplay();
 	}
 
@@ -1907,7 +1956,7 @@ void get_highscore_name(int position)
 	wormy_config.high_scores[position] = player.score;
 
 	// Restore the display
-	blit(backup, screen, 0, 0, (screen_width / 2) - 64, (screen_height / 2) - 32, 128, 64);
+	blit(backup, swap_buffer, 0, 0, (screen_width / 2) - 64, (screen_height / 2) - 32, 128, 64);
 
 	// Clear out the bitmaps
 	destroy_bitmap(backup);
@@ -1937,7 +1986,7 @@ void dofinalescroll()
 		if (position < 200) blit(worminator_data_file[WORMY_SCROLLING_FINALE].dat, buf, 0, 0, 0, 200 - position, 320, 200);
 		else blit(worminator_data_file[WORMY_SCROLLING_FINALE].dat, buf, 0, position - 200, 0, 0, 320, 200);
 		masked_stretch_blit(buf, screenbuf, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
-		blit(screenbuf, screen, 0, 0, 0, 0, screen_width, screen_height);
+		blit(screenbuf, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
 		if (speed_counter == 0) rest(1);
 	} while (position <= 1000 && !keypressed());	// End core game loop*/
 
@@ -1968,12 +2017,13 @@ int get_new_key()
 
 	// Backup the screen
 	show_mouse(NULL);
-	blit(screen, backup, (screen_width / 2) - 64, (screen_height / 2) - 32, 0, 0, 128, 64);
+	blit(swap_buffer, backup, (screen_width / 2) - 64, (screen_height / 2) - 32, 0, 0, 128, 64);
 
 	// Draw the press any key box on the screen
-	draw_sprite(screen, worminator_data_file[WORMY_PRESS_ANY_KEY_BOX].dat, (screen_width / 2) - 64, (screen_height / 2) - 32);
+	draw_sprite(swap_buffer, worminator_data_file[WORMY_PRESS_ANY_KEY_BOX].dat, (screen_width / 2) - 64, (screen_height / 2) - 32);
 	savedisplay();
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	for (i = 0; i < KEY_MAX; i++) {
 		if (key[i]) oldkeys[i] = TRUE;
@@ -1994,9 +2044,10 @@ int get_new_key()
 
 	// Restore the display
 	show_mouse(NULL);
-	blit(backup, screen, 0, 0, (screen_width / 2) - 64, (screen_height / 2) - 32, 128, 64);
+	blit(backup, swap_buffer, 0, 0, (screen_width / 2) - 64, (screen_height / 2) - 32, 128, 64);
 	savedisplay();
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	return keyprs;
 }
@@ -2044,8 +2095,8 @@ int wormy_controls_menu_1()
 			draw_key(temp_buffer, 238, 139, wormy_config.secondary_controls[INPUT_LOOK]);
 			draw_key(temp_buffer, 238, 152, wormy_config.secondary_controls[INPUT_BULLIT_TIME]);
 
-			// Draw on the final screen, and display mouse
-			stretch_blit(temp_buffer, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			// Draw on the final swap_buffer, and display mouse
+			stretch_blit(temp_buffer, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			savedisplay();
 			show_mouse(screen);
 
@@ -2184,6 +2235,7 @@ int wormy_controls_menu_1()
 		}
 
 		if (idle_speed_counter == 0) rest(1);
+		blit_to_screen(swap_buffer);
 	} while (close_controls_menu == FALSE);
 
 	destroy_bitmap(temp_buffer);
@@ -2233,8 +2285,8 @@ int wormy_controls_menu_2()
 			draw_key(temp_buffer, 238, 139, wormy_config.secondary_controls[INPUT_WEAPON_1]);
 			draw_key(temp_buffer, 238, 152, wormy_config.secondary_controls[INPUT_WEAPON_2]);
 
-			// Draw on the final screen, and display mouse
-			stretch_blit(temp_buffer, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			// Draw on the final swap_buffer, and display mouse
+			stretch_blit(temp_buffer, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			savedisplay();
 			show_mouse(screen);
 
@@ -2430,8 +2482,8 @@ int wormy_controls_menu_3()
 			draw_key(temp_buffer, 238, 145, wormy_config.secondary_controls[INPUT_WEAPON_11]);
 			draw_key(temp_buffer, 238, 158, wormy_config.secondary_controls[INPUT_WEAPON_12]);
 
-			// Draw on the final screen, and display mouse
-			stretch_blit(temp_buffer, screen, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
+			// Draw on the final swap_buffer, and display mouse
+			stretch_blit(temp_buffer, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			savedisplay();
 			show_mouse(screen);
 
@@ -2599,8 +2651,9 @@ void wormy_controls_menu()
 
 	// Backup the screen
 	show_mouse(NULL);
-	blit(screen, backup, 0, 0, 0, 0, screen_width, screen_height);
+	blit(swap_buffer, backup, 0, 0, 0, 0, screen_width, screen_height);
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	while (!done) {
 		if (page_num == 0) {
@@ -2617,9 +2670,10 @@ void wormy_controls_menu()
 
 	// Restore the screen
 	show_mouse(NULL);
-	blit(backup, screen, 0, 0, 0, 0, screen_width, screen_height);
+	blit(backup, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
 	savedisplay();
 	show_mouse(screen);
+	blit_to_screen(swap_buffer);
 
 	destroy_bitmap(backup);
 }
@@ -2636,7 +2690,7 @@ void save_screenshot()
 	} while (exists(fname));
 	set_color_depth(8);
 	backup = create_bitmap_ex(8, screen_width, screen_height);
-	blit(screen, backup, 0, 0, 0, 0, screen_width, screen_height);
+	blit(swap_buffer, backup, 0, 0, 0, 0, screen_width, screen_height);
 	save_bmp(fname, backup, worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 	destroy_bitmap(backup);
 	while (key[KEY_PRTSCR]);

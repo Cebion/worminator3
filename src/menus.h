@@ -162,10 +162,192 @@ char *save_game_filename(void)
 #endif
 }
 
+#define SIMPLE_START_EP1	0
+#define SIMPLE_START_EP2	1
+#define SIMPLE_START_TUTORIAL	2
+#define SIMPLE_START_CUSTOM	3
+
+char *start_names[] = { "EPISODE 1",
+			"EPISODE 2",
+			"TUTORIAL",
+			"CUSTOM LEVEL",
+			NULL};
+
+#define SIMPLE_MENU_START	0
+#define SIMPLE_MENU_LOAD_GAME	1
+#define SIMPLE_MENU_SAVE_GAME	2
+#define SIMPLE_MENU_OPTIONS	3
+#define SIMPLE_MENU_HIGH_SCORES	4
+#define SIMPLE_MENU_QUIT	5
+#define SIMPLE_MENU_TOTAL	(SIMPLE_MENU_QUIT + 1)
+
+char *simple_names[] = {"START GAME",
+			"LOAD GAME",
+			"SAVE GAME",
+			"OPTIONS",
+			"HIGH SCORES",
+			"QUIT", NULL};
+
+void blit_simple_menu(char *names[], int chosen_option)
+{
+	int i = 0;
+	int y = 8*10;
+
+	for (; names[i]; i++, y += 8) {
+		textout_centre_ex(swap_buffer, font, names[i],
+				  screen_width / 2,  y,
+				  (i == chosen_option ? 255 : 7), -1);
+	}
+
+	blit_to_screen(swap_buffer);
+}
+
+void wormy_menu()
+{
+	BITMAP *backup_bitmap = create_bitmap_ex(8, 320, 200);
+	char close_menu = FALSE;
+	char close_submenu = FALSE;
+	char esc_status = 0;
+	int chosen_option = 0;
+	int chosen_suboption = 0;
+
+	// Pause the music
+	midi_pause();
+
+	// Set the esc status
+	if (key[KEY_ESC]) esc_status = 1;
+
+	// Pause the game while the menu is open
+	game_is_running = FALSE;
+	idle_counter = 0;
+
+	savedisplay();
+
+	// This is the core menu loop
+	do {
+		idle_speed_counter = 0;
+
+		if (key[KEY_UP]) {
+			while (key[KEY_UP]) rest(1);
+			if (chosen_option > SIMPLE_MENU_START)
+				chosen_option--;
+		}
+
+		if (key[KEY_DOWN]) {
+			while (key[KEY_DOWN]) rest(1);
+			if (chosen_option < SIMPLE_MENU_QUIT)
+				chosen_option++;
+		}
+
+		if (key[KEY_LCONTROL]) {
+			while (key[KEY_LCONTROL]) rest(1);
+
+			switch (chosen_option) {
+			case SIMPLE_MENU_START:
+				loaddisplay();
+				chosen_suboption = 0;
+
+				do {
+					idle_speed_counter = 0;
+
+					if (key[KEY_UP]) {
+						while (key[KEY_UP]) rest(1);
+						if (chosen_suboption > SIMPLE_START_EP1)
+							chosen_suboption--;
+					}
+
+					if (key[KEY_DOWN]) {
+						while (key[KEY_DOWN]) rest(1);
+						if (chosen_suboption < SIMPLE_START_CUSTOM)
+							chosen_suboption++;
+					}
+
+					if (key[KEY_LCONTROL]) {
+						while (key[KEY_LCONTROL]) rest(1);
+
+						switch (chosen_suboption) {
+						case SIMPLE_START_EP1:
+							if (load_map(1, NULL, 1)) {
+								close_submenu = TRUE;
+								close_menu = TRUE;
+							}
+							break;
+						case SIMPLE_START_EP2:
+							if (load_map(7, NULL, 1)) {
+								close_submenu = TRUE;
+								close_menu = TRUE;
+							}
+							break;
+						case SIMPLE_START_TUTORIAL:
+							if (load_map(-1, DATADIR "tutorial.map", 1)) {
+								close_submenu = TRUE;
+								close_menu = TRUE;
+							}
+							break;
+						default:
+							break;
+						}
+					}
+
+					if (key[KEY_ESC]) {
+						while (key[KEY_ESC]) rest(1);
+						close_submenu = TRUE;
+						idle_speed_counter = 0;
+					}
+
+					if (idle_speed_counter == 0) rest(1);
+
+					blit_simple_menu(start_names, chosen_suboption);
+				} while (close_submenu == FALSE);
+				loaddisplay();
+				close_submenu = FALSE;
+				break;
+			case SIMPLE_MENU_QUIT:
+				if (current_level > 0)
+					check_high_score();
+				time_to_quit = TRUE;
+				close_menu = TRUE;
+				break;
+			default:
+				break;
+			}
+		}
+
+		// Go back to game if esc pressed
+		if (key[KEY_ESC]) {
+			if (current_level != -69 && esc_status == 0) {
+				while (key[KEY_ESC]) rest(1);
+				close_menu = TRUE;
+				idle_counter = 0;
+			}
+		} else {
+			esc_status = 0;
+		}
+
+		if (idle_speed_counter == 0)
+			rest(1);
+
+		blit_simple_menu(simple_names, chosen_option);
+	} while (close_menu == FALSE);
+
+	show_mouse(NULL);
+
+	if (!time_to_quit) {
+		blit(worminator_data_file[WORMINATOR_HUD].dat, screen_buffer, 0, 0, 0, 0, 320, 200);
+		update_player_stats();
+		hurt_player(0);
+		borders_dirty = TRUE;
+		render_map();
+	}
+
+	destroy_bitmap(backup_bitmap);
+	midi_resume();
+}
+
 /****************\
 |** WORMY MENU **|
 \****************/
-void wormy_menu()
+void wormy_menu_old()
 {
 	BITMAP *backup_bitmap = create_bitmap_ex(8, 320, 200);
 	char close_menu = FALSE;

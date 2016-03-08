@@ -2229,7 +2229,7 @@ char load_map(char new_level, char *_file_name, char _clear_player)
 
 	// Set current level & clear player if requested
 	current_level = new_level;
-	snprintf(current_level_mapfile_path, sizeof(current_level_mapfile_path), file_name);
+	strncpy(current_level_mapfile_path, file_name, sizeof(current_level_mapfile_path));
 	if (_clear_player) {
 		clear_player();
 		player.score = 0;

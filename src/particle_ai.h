@@ -109,7 +109,7 @@ void water_splash_ai(int sprite_number)
 /*****************\
 |** SHRAPGIB AI **|
 \*****************/
-void shrapgib_ai(sprite_number)
+void shrapgib_ai(int sprite_number)
 {
 	// Update the timer and destroy sprite if time is up
 	sprites[sprite_number].timer--;

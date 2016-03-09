@@ -202,14 +202,73 @@ void blit_simple_menu(char *names[], int chosen_option)
 	blit_to_screen(swap_buffer);
 }
 
+/* should be called from wormy_menu() only */
+char wormy_start_submenu()
+{
+	static int chosen_suboption = 0;
+
+	do {
+		idle_speed_counter = 0;
+
+		if (key[KEY_UP]) {
+			while (key[KEY_UP]) rest(1);
+			if (chosen_suboption > SIMPLE_START_EP1)
+				chosen_suboption--;
+		}
+
+		if (key[KEY_DOWN]) {
+			while (key[KEY_DOWN]) rest(1);
+			if (chosen_suboption < SIMPLE_START_CUSTOM)
+				chosen_suboption++;
+		}
+
+		if (key[KEY_LCONTROL]) {
+			while (key[KEY_LCONTROL]) rest(1);
+
+			switch (chosen_suboption) {
+			case SIMPLE_START_EP1:
+				if (load_map(1, NULL, 1)) {
+					return TRUE;
+				}
+				break;
+			case SIMPLE_START_EP2:
+				if (load_map(7, NULL, 1)) {
+					return TRUE;
+				}
+				break;
+			case SIMPLE_START_TUTORIAL:
+				if (load_map(-1, DATADIR "tutorial.map", 1)) {
+					return TRUE;
+				}
+				break;
+			case SIMPLE_START_CUSTOM:
+				if (start_new_custom_game())
+					return TRUE;
+				break;
+			default:
+				break;
+			}
+		}
+
+		if (key[KEY_ESC]) {
+			while (key[KEY_ESC]) rest(1);
+			return FALSE;
+			idle_speed_counter = 0;
+		}
+
+		if (idle_speed_counter == 0) rest(1);
+
+		blit_simple_menu(start_names, chosen_suboption);
+	} while (TRUE);
+
+	return FALSE;
+}
+
 void wormy_menu()
 {
-	BITMAP *backup_bitmap = create_bitmap_ex(8, 320, 200);
 	char close_menu = FALSE;
-	char close_submenu = FALSE;
 	char esc_status = 0;
 	int chosen_option = 0;
-	int chosen_suboption = 0;
 
 	// Pause the music
 	midi_pause();
@@ -245,62 +304,11 @@ void wormy_menu()
 			switch (chosen_option) {
 			case SIMPLE_MENU_START:
 				loaddisplay();
-				chosen_suboption = 0;
 
-				do {
-					idle_speed_counter = 0;
+				if (wormy_start_submenu())
+					close_menu = TRUE;
 
-					if (key[KEY_UP]) {
-						while (key[KEY_UP]) rest(1);
-						if (chosen_suboption > SIMPLE_START_EP1)
-							chosen_suboption--;
-					}
-
-					if (key[KEY_DOWN]) {
-						while (key[KEY_DOWN]) rest(1);
-						if (chosen_suboption < SIMPLE_START_CUSTOM)
-							chosen_suboption++;
-					}
-
-					if (key[KEY_LCONTROL]) {
-						while (key[KEY_LCONTROL]) rest(1);
-
-						switch (chosen_suboption) {
-						case SIMPLE_START_EP1:
-							if (load_map(1, NULL, 1)) {
-								close_submenu = TRUE;
-								close_menu = TRUE;
-							}
-							break;
-						case SIMPLE_START_EP2:
-							if (load_map(7, NULL, 1)) {
-								close_submenu = TRUE;
-								close_menu = TRUE;
-							}
-							break;
-						case SIMPLE_START_TUTORIAL:
-							if (load_map(-1, DATADIR "tutorial.map", 1)) {
-								close_submenu = TRUE;
-								close_menu = TRUE;
-							}
-							break;
-						default:
-							break;
-						}
-					}
-
-					if (key[KEY_ESC]) {
-						while (key[KEY_ESC]) rest(1);
-						close_submenu = TRUE;
-						idle_speed_counter = 0;
-					}
-
-					if (idle_speed_counter == 0) rest(1);
-
-					blit_simple_menu(start_names, chosen_suboption);
-				} while (close_submenu == FALSE);
 				loaddisplay();
-				close_submenu = FALSE;
 				break;
 			case SIMPLE_MENU_QUIT:
 				if (current_level > 0)
@@ -340,7 +348,6 @@ void wormy_menu()
 		render_map();
 	}
 
-	destroy_bitmap(backup_bitmap);
 	midi_resume();
 }
 
@@ -1581,11 +1588,11 @@ char start_new_custom_game()
 {
 	char retval = FALSE;
 	char file_name[256] = "";
-	BITMAP *backup_bitmap = create_bitmap_ex(8, 320, 200);
+	BITMAP *backup_bitmap = create_bitmap_ex(8, swap_buffer->w, swap_buffer->h);
 
 	// Back up existing screen
 	show_mouse(NULL);
-	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, 320, 200);
+	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, swap_buffer->w, swap_buffer->h);
 
 	if (file_select_ex("Select a map data file (.map files)", file_name, "map", sizeof(file_name), 0, 0) != 0)
 		retval = load_map(-1, file_name, 1);

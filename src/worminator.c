@@ -69,7 +69,7 @@ void fade_out_pal(int delay)
 void blit_to_screen(BITMAP *bmp)
 {
 	acquire_screen();
-	blit(bmp, screen, 0, 0, 0, 0, screen_width, screen_height);
+	blit(bmp, screen, 0, 0, 0, 0, bmp->w, bmp->h);
 	release_screen();
 }
 

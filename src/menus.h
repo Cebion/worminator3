@@ -310,12 +310,32 @@ void wormy_menu()
 
 				loaddisplay();
 				break;
+
+			case SIMPLE_MENU_LOAD_GAME:
+				if (!access(save_game_filename(), R_OK)) {
+					if (load_saved_game(save_game_filename()))
+						close_menu = TRUE;
+				} else {
+					alert("You do not appear to have a", "previous saved game to load.  Start or load", "a game instead!", "OK", 0, 0, 0);
+				}
+				break;
+
+			case SIMPLE_MENU_SAVE_GAME:
+				if (current_level != -69) {
+					save_game(save_game_filename());
+					close_menu = TRUE;
+				} else {
+					alert("You must be playing a game before", "you can save one.  Start or load", "a game and try again!", "OK", 0, 0, 0);
+				}
+				break;
+
 			case SIMPLE_MENU_QUIT:
 				if (current_level > 0)
 					check_high_score();
 				time_to_quit = TRUE;
 				close_menu = TRUE;
 				break;
+
 			default:
 				break;
 			}

@@ -137,15 +137,18 @@ void do_radial_wipe(BITMAP *bmp, BITMAP *img, int x, int y, int delay, int step,
 	if (direction == 0) {	// Clockwise
 		for (i = 0; i < 256; i += step) {
 			radial_wipe(bmp, img, x, y, (unsigned char)(i));
+			blit_to_screen(bmp);
 			rest(delay);
 		}
 	} else if (direction == 1) {	// Counterclockwise
 		for (i = 256; i > 0; i -= step) {
 			radial_wipe(bmp, img, x, y, (unsigned char)(i));
+			blit_to_screen(bmp);
 			rest(delay);
 		}
 	}
 	radial_wipe(bmp, img, x, y, 255);
+	blit_to_screen(bmp);
 }
 
 char *save_game_filename(void)

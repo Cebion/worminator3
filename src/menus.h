@@ -196,7 +196,7 @@ void blit_simple_menu(char *names[], int chosen_option)
 	for (; names[i]; i++, y += 8) {
 		textout_centre_ex(swap_buffer, font, names[i],
 				  screen_width / 2,  y,
-				  (i == chosen_option ? 255 : 7), -1);
+				  (i == chosen_option ? 255 : 7), 16);
 	}
 
 	blit_to_screen(swap_buffer);

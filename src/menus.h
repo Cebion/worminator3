@@ -2129,6 +2129,7 @@ void get_highscore_name(int position)
 
 	// Draw the input box on screen
 	draw_sprite(swap_buffer, buffer, (screen_width / 2) - 64, (screen_height / 2) - 32);
+	blit_to_screen(swap_buffer);
 
 	// Accept input
 	while (!done) {
@@ -2154,6 +2155,7 @@ void get_highscore_name(int position)
 		blit(worminator_data_file[WORMY_HIGH_SCORE_INPUT_BOX].dat, buffer, 0, 0, 0, 0, 128, 64);
 		textout(buffer, font, input, 6, 49, 5);
 		draw_sprite(swap_buffer, buffer, (screen_width / 2) - 64, (screen_height / 2) - 32);
+		blit_to_screen(swap_buffer);
 		savedisplay();
 	}
 

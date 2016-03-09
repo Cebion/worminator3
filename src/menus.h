@@ -269,6 +269,7 @@ char wormy_start_submenu()
 
 void wormy_menu()
 {
+	BITMAP *backup_bitmap = create_bitmap_ex(8, swap_buffer->w, swap_buffer->h);
 	char close_menu = FALSE;
 	char esc_status = 0;
 	int chosen_option = 0;
@@ -283,7 +284,7 @@ void wormy_menu()
 	game_is_running = FALSE;
 	idle_counter = 0;
 
-	savedisplay();
+	blit(swap_buffer, backup_bitmap, 0, 0, 0, 0, swap_buffer->w, swap_buffer->h);
 
 	// This is the core menu loop
 	do {
@@ -306,12 +307,14 @@ void wormy_menu()
 
 			switch (chosen_option) {
 			case SIMPLE_MENU_START:
-				loaddisplay();
+				blit(backup_bitmap, swap_buffer, 0, 0, 0, 0,
+					swap_buffer->w, swap_buffer->h);
 
 				if (wormy_start_submenu())
 					close_menu = TRUE;
 
-				loaddisplay();
+				blit(backup_bitmap, swap_buffer, 0, 0, 0, 0,
+					swap_buffer->w, swap_buffer->h);
 				break;
 
 			case SIMPLE_MENU_LOAD_GAME:
@@ -330,6 +333,10 @@ void wormy_menu()
 				} else {
 					alert("You must be playing a game before", "you can save one.  Start or load", "a game and try again!", "OK", 0, 0, 0);
 				}
+				break;
+
+			case SIMPLE_MENU_HIGH_SCORES:
+				display_snapshot(14, TRUE);
 				break;
 
 			case SIMPLE_MENU_QUIT:
@@ -372,6 +379,7 @@ void wormy_menu()
 	}
 
 	midi_resume();
+	destroy_bitmap(backup_bitmap);
 }
 
 /****************\

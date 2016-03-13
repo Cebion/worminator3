@@ -1247,6 +1247,7 @@ void render_map()
 		stretch_blit(double_buffer, swap_buffer, 0, 0, 256, 192,
 			     (int)(screen_width * 0.0125), (int)(screen_height * 0.02),
 			     (int)(screen_width * .8), (int)(screen_height * .96));
+		blit_to_screen(swap_buffer);
 		return;
 	}
 

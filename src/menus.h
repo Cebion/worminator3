@@ -191,6 +191,31 @@ char *simple_names[] = {"START GAME",
 			"HIGH SCORES",
 			"QUIT", NULL};
 
+#define SIMPLE_OP_GAMESPEED	0
+#define SIMPLE_OP_PARTDETAIL	1
+#define SIMPLE_OP_REMEMBSKIN	2
+#define SIMPLE_OP_MAYTRICKS	3
+#define SIMPLE_OP_AUTOWEAPONS	4
+#define SIMPLE_OP_WEAPONPICK	5
+#define SIMPLE_OP_SKIPINTRO	6
+#define SIMPLE_OP_DISPPARTICLE	7
+#define SIMPLE_OP_SHOWLASER	8
+#define SIMPLE_OP_ENABLEFSAA	9
+
+char *option_names[] = {
+	"GAME SPEED",		// very slow, slow, normal, fast, very fast
+	"PARTICLE DETAIL",	// full, half
+	"REMEMBER SKIN",	// on, off
+	"MAY TRICKS MODE",	// on, off
+	"AUTOSWITCH WEAPONS",	// on, off
+	"SWITCH WEAPONS ON PICKUP", // on. off
+	"SKIP INTRO",		// on, off
+	"DISPLAY PARTICLES",	// on, off
+	"SHOW LASER SIGHT",	// on, off
+	"ENABLE FSAA",		// on, off
+	NULL
+};
+
 void blit_simple_menu(char *names[], int chosen_option)
 {
 	int i = 0;
@@ -203,6 +228,38 @@ void blit_simple_menu(char *names[], int chosen_option)
 	}
 
 	blit_to_screen(swap_buffer);
+}
+
+/* should be called from wormy_menu() only */
+void wormy_options_submenu()
+{
+	static int chosen_suboption = 0;
+
+	do {
+		idle_speed_counter = 0;
+
+		if (key[KEY_UP]) {
+			while (key[KEY_UP]) rest(1);
+			if (chosen_suboption > SIMPLE_OP_GAMESPEED)
+				chosen_suboption--;
+		}
+
+		if (key[KEY_DOWN]) {
+			while (key[KEY_DOWN]) rest(1);
+			if (chosen_suboption < SIMPLE_OP_ENABLEFSAA)
+				chosen_suboption++;
+		}
+
+		if (key[KEY_ESC]) {
+			while (key[KEY_ESC]) rest(1);
+			return;
+			idle_speed_counter = 0;
+		}
+
+		if (idle_speed_counter == 0) rest(1);
+
+		blit_simple_menu(option_names, chosen_suboption);
+	} while (TRUE);
 }
 
 /* should be called from wormy_menu() only */
@@ -333,6 +390,16 @@ void wormy_menu()
 				} else {
 					alert("You must be playing a game before", "you can save one.  Start or load", "a game and try again!", "OK", 0, 0, 0);
 				}
+				break;
+
+			case SIMPLE_MENU_OPTIONS:
+				blit(backup_bitmap, swap_buffer, 0, 0, 0, 0,
+					swap_buffer->w, swap_buffer->h);
+
+				wormy_options_submenu();
+
+				blit(backup_bitmap, swap_buffer, 0, 0, 0, 0,
+					swap_buffer->w, swap_buffer->h);
 				break;
 
 			case SIMPLE_MENU_HIGH_SCORES:

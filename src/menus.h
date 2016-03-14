@@ -1664,9 +1664,7 @@ void wormy_options_menu()
 	screen_width = new_sw, screen_height = new_sh;
 	if (must_change_resolution == TRUE) {
 		// Don't do this with the callback set this causes crashes on unix
-		remove_display_switch_callback(loaddisplay);
 		change_resolution(screen_width, screen_height);
-		set_display_switch_callback(SWITCH_IN, loaddisplay);
 	}
 
 	// Change the sound if nessecary

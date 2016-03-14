@@ -17,7 +17,6 @@ void fade_in_pal(void *palette, int delay);
 void fade_out_pal(int delay);
 void blit_to_screen(BITMAP *bmp);
 void savedisplay();
-void loaddisplay();
 void greenify();
 void redify();
 void little_tinge();

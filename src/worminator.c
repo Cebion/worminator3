@@ -80,12 +80,6 @@ void savedisplay()
 	blit(swap_buffer, screenbackup, 0, 0, 0, 0, screen_width, screen_height);
 }
 
-void loaddisplay()
-{
-	if (game_is_running || (screenbackup == NULL)) return;
-	blit(screenbackup, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
-}
-
 void greenify()
 {
 	RGB newcol, oldcol;
@@ -367,7 +361,6 @@ int main(int argc, char *argv[])
 	remove_mouse();
 	remove_sound();
 	remove_timer();
-	remove_display_switch_callback(loaddisplay);
 
 	// Clean out some memory
 	add_console_line("Deallocating memory.");
@@ -3381,7 +3374,6 @@ void initialize()
 	change_resolution(wormy_config.screen_width, wormy_config.screen_height);
 	set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);
 	set_display_switch_mode(SWITCH_AMNESIA);
-	set_display_switch_callback(SWITCH_IN, loaddisplay);
 
 	// Make text drawn in transparent mode
 	add_console_line("Completing initilization.");

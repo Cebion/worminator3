@@ -230,10 +230,92 @@ void blit_simple_menu(char *names[], int chosen_option)
 	blit_to_screen(swap_buffer);
 }
 
+void update_options()
+{
+	static char game_speed[256];
+
+	// GAME SPEED
+	switch (wormy_config.game_speed) {
+	case GAME_SPEED_VERY_SLOW:
+		strcpy(game_speed, "GAME SPEED: VERY SLOW");
+		break;
+	case GAME_SPEED_SLOW:
+		strcpy(game_speed, "GAME SPEED: SLOW");
+		break;
+	case GAME_SPEED_NORMAL:
+		strcpy(game_speed, "GAME SPEED: NORMAL");
+		break;
+	case GAME_SPEED_FAST:
+		strcpy(game_speed, "GAME SPEED: FAST");
+		break;
+	case GAME_SPEED_VERY_FAST:
+		strcpy(game_speed, "GAME SPEED: VERY FAST");
+		break;
+	}
+
+	option_names[SIMPLE_OP_GAMESPEED] = game_speed;
+
+	// PARTICLE DETAIL
+	if (wormy_config.particle_detail == 0)	// 0 - full
+		option_names[SIMPLE_OP_PARTDETAIL] = "PARTICLE DETAIL: FULL";
+	else					// 1 - half
+		option_names[SIMPLE_OP_PARTDETAIL] = "PARTICLE DETAIL: HALF";
+
+	// REMEMBER SKIN
+	if (wormy_config.remember_skin == TRUE)
+		option_names[SIMPLE_OP_REMEMBSKIN] = "REMEMBER SKIN: ON";
+	else
+		option_names[SIMPLE_OP_REMEMBSKIN] = "REMEMBER SKIN: OFF";
+
+	// MAY TRICKS MODE
+	if (wormy_config.may_tricks_mode == TRUE)
+		option_names[SIMPLE_OP_MAYTRICKS] = "MAY TRICKS MODE: ON";
+	else
+		option_names[SIMPLE_OP_MAYTRICKS] = "MAY TRICKS MODE: OFF";
+
+	// AUTO SWITCH WEAPONS
+	if (wormy_config.autoswitch_weapons == TRUE)
+		option_names[SIMPLE_OP_AUTOWEAPONS] = "AUTOSWITCH WEAPONS: ON";
+	else
+		option_names[SIMPLE_OP_AUTOWEAPONS] = "AUTOSWITCH WEAPONS: OFF";
+
+	// SWITCH WEAPONS ON PICKUP
+	if (wormy_config.switch_weapons_on_pickup == TRUE)
+		option_names[SIMPLE_OP_WEAPONPICK] = "SWITCH WEAPONS ON PICKUP: ON";
+	else
+		option_names[SIMPLE_OP_WEAPONPICK] = "SWITCH WEAPONS ON PICKUP: OFF";
+
+	// SKIP INTRO
+	if (wormy_config.skip_intro == TRUE)
+		option_names[SIMPLE_OP_SKIPINTRO] = "SKIP INTRO: ON";
+	else
+		option_names[SIMPLE_OP_SKIPINTRO] = "SKIP INTRO: OFF";
+
+	// DISPLAY PARTICLES
+	if (wormy_config.display_particles == TRUE)
+		option_names[SIMPLE_OP_DISPPARTICLE] = "DISPLAY PARTICLES: ON";
+	else
+		option_names[SIMPLE_OP_DISPPARTICLE] = "DISPLAY PARTICLES: OFF";
+
+	// SHOW LASER SIGHT
+	if (wormy_config.show_laser_sight == TRUE)
+		option_names[SIMPLE_OP_SHOWLASER] = "SHOW LASER SIGHT: ON";
+	else
+		option_names[SIMPLE_OP_SHOWLASER] = "SHOW LASER SIGHT: OFF";
+
+	// ENABLE FSAA
+	if (wormy_config.enable_FSAA == TRUE)
+		option_names[SIMPLE_OP_ENABLEFSAA] = "ENABLE FSAA: ON";
+	else
+		option_names[SIMPLE_OP_ENABLEFSAA] = "ENABLE FSAA: OFF";
+}
+
 /* should be called from wormy_menu() only */
 void wormy_options_submenu()
 {
 	static int chosen_suboption = 0;
+
+	update_options();
 
 	do {
 		idle_speed_counter = 0;

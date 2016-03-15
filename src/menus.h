@@ -192,18 +192,20 @@ char *simple_names[] = {"START GAME",
 			"QUIT", NULL};
 
 #define SIMPLE_OP_GAMESPEED	0
-#define SIMPLE_OP_PARTDETAIL	1
-#define SIMPLE_OP_REMEMBSKIN	2
-#define SIMPLE_OP_MAYTRICKS	3
-#define SIMPLE_OP_AUTOWEAPONS	4
-#define SIMPLE_OP_WEAPONPICK	5
-#define SIMPLE_OP_SKIPINTRO	6
-#define SIMPLE_OP_DISPPARTICLE	7
-#define SIMPLE_OP_SHOWLASER	8
-#define SIMPLE_OP_ENABLEFSAA	9
+#define SIMPLE_OP_DIFFICULTY	1
+#define SIMPLE_OP_PARTDETAIL	2
+#define SIMPLE_OP_REMEMBSKIN	3
+#define SIMPLE_OP_MAYTRICKS	4
+#define SIMPLE_OP_AUTOWEAPONS	5
+#define SIMPLE_OP_WEAPONPICK	6
+#define SIMPLE_OP_SKIPINTRO	7
+#define SIMPLE_OP_DISPPARTICLE	8
+#define SIMPLE_OP_SHOWLASER	9
+#define SIMPLE_OP_ENABLEFSAA	10
 
 char *option_names[] = {
 	"GAME SPEED",		// very slow, slow, normal, fast, very fast
+	"DIFICULTY",		//
 	"PARTICLE DETAIL",	// full, half
 	"REMEMBER SKIN",	// on, off
 	"MAY TRICKS MODE",	// on, off
@@ -233,6 +235,7 @@ void blit_simple_menu(char *names[], int chosen_option)
 void update_options()
 {
 	static char game_speed[256];
+	static char difficulty[256];
 
 	// GAME SPEED
 	switch (wormy_config.game_speed) {
@@ -254,6 +257,27 @@ void update_options()
 	}
 
 	option_names[SIMPLE_OP_GAMESPEED] = game_speed;
+
+	// DIFFICULTY
+	switch (wormy_config.difficulty) {
+	case DIFFICULTY_WIMP:
+		strcpy(difficulty, "DIFFICULTY: WIMP");
+		break;
+	case DIFFICULTY_EASY:
+		strcpy(difficulty, "DIFFICULTY: EASY");
+		break;
+	case DIFFICULTY_NORMAL:
+		strcpy(difficulty, "DIFFICULTY: NORMAL");
+		break;
+	case DIFFICULTY_HARD:
+		strcpy(difficulty, "DIFFICULTY: HARD");
+		break;
+	case DIFFICULTY_NIGHTMARE:
+		strcpy(difficulty, "DIFFICULTY: NIGHTMARE");
+		break;
+	}
+
+	option_names[SIMPLE_OP_DIFFICULTY] = difficulty;
 
 	// PARTICLE DETAIL
 	if (wormy_config.particle_detail == 0)	// 0 - full

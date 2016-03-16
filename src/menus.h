@@ -2149,6 +2149,12 @@ void display_snapshot(char snapshot_number, char show_mouse_pointer)
 			close_snapshot = TRUE;
 		}
 
+		// Optional lctrl keypress
+		if (key[KEY_LCONTROL]) {
+			while (key[KEY_LCONTROL]);
+			close_snapshot = TRUE;
+		}
+
 		if (idle_speed_counter == 0) rest(1);
 	} while (close_snapshot == FALSE);
 
@@ -2252,6 +2258,12 @@ void display_story(char show_mouse_pointer)
 		// Optional enter keypress
 		if (key[KEY_ENTER]) {
 			while (key[KEY_ENTER]);
+			close_story = TRUE;
+		}
+
+		// Optional lctrl keypress
+		if (key[KEY_LCONTROL]) {
+			while (key[KEY_LCONTROL]);
 			close_story = TRUE;
 		}
 

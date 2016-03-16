@@ -2490,6 +2490,7 @@ void dofinalescroll()
 		else blit(worminator_data_file[WORMY_SCROLLING_FINALE].dat, buf, 0, position - 200, 0, 0, 320, 200);
 		masked_stretch_blit(buf, screenbuf, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 		blit(screenbuf, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
+		blit_to_screen(swap_buffer);
 		if (speed_counter == 0) rest(1);
 	} while (position <= 1000 && !keypressed());	// End core game loop*/
 

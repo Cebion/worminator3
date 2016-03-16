@@ -2375,6 +2375,12 @@ void display_recap(char show_mouse_pointer)
 			close_story = TRUE;
 		}
 
+		// Optional lctrl keypress
+		if (key[KEY_LCONTROL]) {
+			while (key[KEY_LCONTROL]);
+			close_story = TRUE;
+		}
+
 		if (idle_speed_counter == 0) rest(1);
 		blit_to_screen(swap_buffer);
 	} while (close_story == FALSE);

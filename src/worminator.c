@@ -69,7 +69,7 @@ void fade_out_pal(int delay)
 void blit_to_screen(BITMAP *bmp)
 {
 	acquire_screen();
-	blit(bmp, screen, 0, 0, 0, 0, bmp->w, bmp->h);
+	blit(bmp, screen, 0, 0, 0, (bmp->h == 200 ? 20 : 0), bmp->w, bmp->h);
 	release_screen();
 }
 
@@ -3183,6 +3183,9 @@ void change_resolution(int x, int y)
 	screen_width = x;
 	screen_height = y;
 
+	if (screen_height == 200)
+		screen_height = 240;
+
 	// Resize the display
 #ifdef ALLEGRO_WINDOWS
 	if (wormy_config.safe_mode == 1 && wormy_config.run_windowed == FALSE)
@@ -3204,6 +3207,8 @@ void change_resolution(int x, int y)
 		log2file("ERROR: %s", allegro_error);
 		exit(-1);
 	}
+
+	screen_height = y;
 
 	// Reset the pallete
 	set_pallete(worminator_data_file[DEFAULT_WORMINATOR_PALLETE].dat);

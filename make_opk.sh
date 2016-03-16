@@ -24,6 +24,7 @@ FLIST="${FLIST} worminator"
 FLIST="${FLIST} license-change.txt"
 FLIST="${FLIST} license.txt"
 FLIST="${FLIST} ReadMe.txt"
+FLIST="${FLIST} allegro.cfg patches.dat"
 
 rm -f ${OPK_NAME}
 mksquashfs ${FLIST} ${OPK_NAME} -all-root -no-xattrs -noappend -no-exports

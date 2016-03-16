@@ -2131,7 +2131,9 @@ void display_snapshot(char snapshot_number, char show_mouse_pointer)
 		stretch_blit(worminator_data_file[WORMY_GOODBYE_MESSAGE].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	}
 	savedisplay();
+#ifndef DINGUX
 	show_mouse(screen);
+#endif
 	blit_to_screen(swap_buffer);
 
 	// This is the core snapshot loop
@@ -2161,7 +2163,9 @@ void display_snapshot(char snapshot_number, char show_mouse_pointer)
 	// Restore the previous screen and moust pointer display
 	show_mouse(NULL);
 	blit(backup_bitmap, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
+#ifndef DINGUX
 	if (show_mouse_pointer == TRUE) show_mouse(screen);
+#endif
 	destroy_bitmap(backup_bitmap);
 	destroy_bitmap(buffer_bitmap);
 }
@@ -2186,7 +2190,9 @@ void display_story(char show_mouse_pointer)
 	// Draw the current story screen
 	stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	savedisplay();
+#ifndef DINGUX
 	show_mouse(screen);
+#endif
 	blit_to_screen(swap_buffer);
 
 	// This is the core story loop
@@ -2203,7 +2209,9 @@ void display_story(char show_mouse_pointer)
 				stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 				do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 				savedisplay();
+				#ifndef DINGUX
 				show_mouse(screen);
+				#endif
 			}
 		}
 
@@ -2217,7 +2225,9 @@ void display_story(char show_mouse_pointer)
 			stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 			savedisplay();
+			#ifndef DINGUX
 			show_mouse(screen);
+			#endif
 		}
 
 		// Right Arrow
@@ -2231,7 +2241,9 @@ void display_story(char show_mouse_pointer)
 				stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 				do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 				savedisplay();
+				#ifndef DINGUX
 				show_mouse(screen);
+				#endif
 			}
 		}
 
@@ -2245,7 +2257,9 @@ void display_story(char show_mouse_pointer)
 			stretch_blit(worminator_data_file[WORMY_STORY_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 			savedisplay();
+			#ifndef DINGUX
 			show_mouse(screen);
+			#endif
 			play_sample(worminator_data_file[PAGE_TURN_SOUND].dat, 255, 128, 1000, FALSE);
 		}
 
@@ -2275,7 +2289,9 @@ void display_story(char show_mouse_pointer)
 	show_mouse(NULL);
 	blit(backup_bitmap, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
 	savedisplay();
+#ifndef DINGUX
 	if (show_mouse_pointer == TRUE) show_mouse(screen);
+#endif
 	destroy_bitmap(backup_bitmap);
 	destroy_bitmap(temp_buffer);
 }
@@ -2300,7 +2316,9 @@ void display_recap(char show_mouse_pointer)
 	// Draw the current story screen
 	stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01].dat, swap_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 	savedisplay();
+#ifndef DINGUX
 	show_mouse(screen);
+#endif
 	blit_to_screen(swap_buffer);
 
 	// This is the core story loop
@@ -2317,7 +2335,9 @@ void display_recap(char show_mouse_pointer)
 				stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 				do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 				savedisplay();
+				#ifndef DINGUX
 				show_mouse(screen);
+				#endif
 			}
 		}
 
@@ -2331,7 +2351,9 @@ void display_recap(char show_mouse_pointer)
 			stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 			savedisplay();
+			#ifndef DINGUX
 			show_mouse(screen);
+			#endif
 		}
 
 		// Right Arrow
@@ -2345,7 +2367,9 @@ void display_recap(char show_mouse_pointer)
 				stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 				do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 				savedisplay();
+				#ifndef DINGUX
 				show_mouse(screen);
+				#endif
 			}
 		}
 
@@ -2359,7 +2383,9 @@ void display_recap(char show_mouse_pointer)
 			stretch_blit(worminator_data_file[WORMY_STORY_RECAP_PAGE_01 + story_page_number].dat, temp_buffer, 0, 0, 320, 200, 0, 0, screen_width, screen_height);
 			do_radial_wipe(swap_buffer, temp_buffer, 0, 0, 1, 5, 0);
 			savedisplay();
+			#ifndef DINGUX
 			show_mouse(screen);
+			#endif
 			play_sample(worminator_data_file[PAGE_TURN_SOUND].dat, 255, 128, 1000, FALSE);
 		}
 
@@ -2389,7 +2415,9 @@ void display_recap(char show_mouse_pointer)
 	show_mouse(NULL);
 	blit(backup_bitmap, swap_buffer, 0, 0, 0, 0, screen_width, screen_height);
 	savedisplay();
+#ifndef DINGUX
 	if (show_mouse_pointer == TRUE) show_mouse(screen);
+#endif
 	destroy_bitmap(backup_bitmap);
 	destroy_bitmap(temp_buffer);
 }
@@ -2544,7 +2572,9 @@ int get_new_key()
 	// Draw the press any key box on the screen
 	draw_sprite(swap_buffer, worminator_data_file[WORMY_PRESS_ANY_KEY_BOX].dat, (screen_width / 2) - 64, (screen_height / 2) - 32);
 	savedisplay();
+#ifndef DINGUX
 	show_mouse(screen);
+#endif
 	blit_to_screen(swap_buffer);
 
 	for (i = 0; i < KEY_MAX; i++) {
@@ -2568,7 +2598,9 @@ int get_new_key()
 	show_mouse(NULL);
 	blit(backup, swap_buffer, 0, 0, (screen_width / 2) - 64, (screen_height / 2) - 32, 128, 64);
 	savedisplay();
+#ifndef DINGUX
 	show_mouse(screen);
+#endif
 	blit_to_screen(swap_buffer);
 
 	return keyprs;

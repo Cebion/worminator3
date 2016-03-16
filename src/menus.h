@@ -338,11 +338,13 @@ void update_options()
 void wormy_options_submenu()
 {
 	static int chosen_suboption = 0;
+	int toggle;
 
 	update_options();
 
 	do {
 		idle_speed_counter = 0;
+		toggle = 0;
 
 		if (key[KEY_UP]) {
 			while (key[KEY_UP]) rest(1);
@@ -356,16 +358,124 @@ void wormy_options_submenu()
 				chosen_suboption++;
 		}
 
+		if (key[KEY_RIGHT]) {
+			while (key[KEY_RIGHT]) rest(1);
+
+			switch (chosen_suboption) {
+			case SIMPLE_OP_GAMESPEED:
+				if (wormy_config.game_speed == GAME_SPEED_VERY_SLOW)
+					wormy_config.game_speed = GAME_SPEED_SLOW;
+				else if (wormy_config.game_speed == GAME_SPEED_SLOW)
+					wormy_config.game_speed = GAME_SPEED_NORMAL;
+				else if (wormy_config.game_speed == GAME_SPEED_NORMAL)
+					wormy_config.game_speed = GAME_SPEED_FAST;
+				else if (wormy_config.game_speed == GAME_SPEED_FAST)
+					wormy_config.game_speed = GAME_SPEED_VERY_FAST;
+				break;
+			case SIMPLE_OP_DIFFICULTY:
+				if (wormy_config.difficulty < DIFFICULTY_NIGHTMARE)
+					wormy_config.difficulty++;
+				break;
+			}
+
+			toggle = 1;
+		}
+
+		if (key[KEY_LEFT]) {
+			while (key[KEY_LEFT]) rest(1);
+
+			switch (chosen_suboption) {
+			case SIMPLE_OP_GAMESPEED:
+				if (wormy_config.game_speed == GAME_SPEED_VERY_FAST)
+					wormy_config.game_speed = GAME_SPEED_FAST;
+				else if (wormy_config.game_speed == GAME_SPEED_FAST)
+					wormy_config.game_speed = GAME_SPEED_NORMAL;
+				else if (wormy_config.game_speed == GAME_SPEED_NORMAL)
+					wormy_config.game_speed = GAME_SPEED_SLOW;
+					else if (wormy_config.game_speed == GAME_SPEED_SLOW)
+					wormy_config.game_speed = GAME_SPEED_VERY_SLOW;
+				break;
+			case SIMPLE_OP_DIFFICULTY:
+				if (wormy_config.difficulty > DIFFICULTY_WIMP)
+					wormy_config.difficulty--;
+				break;
+			}
+
+			toggle = 1;
+		}
+
+		if (toggle) {
+			switch (chosen_suboption) {
+			case SIMPLE_OP_PARTDETAIL:
+				if (wormy_config.particle_detail == 0)
+					wormy_config.particle_detail = 1;
+				else
+					wormy_config.particle_detail = 0;
+				break;
+			case SIMPLE_OP_REMEMBSKIN:
+				if (wormy_config.remember_skin == TRUE)
+					wormy_config.remember_skin = FALSE;
+				else
+					wormy_config.remember_skin = TRUE;
+				break;
+			case SIMPLE_OP_MAYTRICKS:
+				if (wormy_config.may_tricks_mode == TRUE)
+					wormy_config.may_tricks_mode = FALSE;
+				else
+					wormy_config.may_tricks_mode = TRUE;
+				break;
+			case SIMPLE_OP_AUTOWEAPONS:
+				if (wormy_config.autoswitch_weapons == TRUE)
+					wormy_config.autoswitch_weapons = FALSE;
+				else
+					wormy_config.autoswitch_weapons = TRUE;
+			case SIMPLE_OP_WEAPONPICK:
+				if (wormy_config.switch_weapons_on_pickup == TRUE)
+					wormy_config.switch_weapons_on_pickup = FALSE;
+				else
+					wormy_config.switch_weapons_on_pickup = TRUE;
+				break;
+			case SIMPLE_OP_SKIPINTRO:
+				if (wormy_config.skip_intro == TRUE)
+					wormy_config.skip_intro = FALSE;
+				else
+					wormy_config.skip_intro = TRUE;
+				break;
+			case SIMPLE_OP_DISPPARTICLE:
+				if (wormy_config.display_particles == TRUE)
+					wormy_config.display_particles = FALSE;
+				else
+					wormy_config.display_particles = TRUE;
+				break;
+			case SIMPLE_OP_SHOWLASER:
+				if (wormy_config.show_laser_sight == TRUE)
+					wormy_config.show_laser_sight = FALSE;
+				else
+					wormy_config.show_laser_sight = TRUE;
+				break;
+			case SIMPLE_OP_ENABLEFSAA:
+				if (wormy_config.enable_FSAA == TRUE)
+					wormy_config.enable_FSAA = FALSE;
+				else
+					wormy_config.enable_FSAA = TRUE;
+			}
+
+			update_options();
+		}
+
 		if (key[KEY_ESC]) {
 			while (key[KEY_ESC]) rest(1);
-			return;
-			idle_speed_counter = 0;
+			goto _exit;
 		}
 
 		if (idle_speed_counter == 0) rest(1);
 
 		blit_simple_menu(option_names, chosen_suboption);
 	} while (TRUE);
+
+_exit:
+	// Change the game speed if nessecary
+	change_game_speed(wormy_config.game_speed);
 }
 
 /* should be called from wormy_menu() only */

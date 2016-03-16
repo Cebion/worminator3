@@ -2753,8 +2753,13 @@ void load_config()
 	game_is_running = FALSE;
 
 	// Read in all the config settings, defaults will be used if config is missing
+#ifdef DINGUX
+	wormy_config.screen_width = get_config_int("Options", "screen_width", 320);
+	wormy_config.screen_height = get_config_int("Options", "screen_height", 200);
+#else
 	wormy_config.screen_width = get_config_int("Options", "screen_width", 640);
 	wormy_config.screen_height = get_config_int("Options", "screen_height", 480);
+#endif
 
 	wormy_config.controls[INPUT_UP] = get_config_int("Keys", "up", KEY_UP);
 	wormy_config.controls[INPUT_DOWN] = get_config_int("Keys", "down", KEY_DOWN);
@@ -2763,6 +2768,17 @@ void load_config()
 	wormy_config.controls[INPUT_JUMP] = get_config_int("Keys", "jump",
 							   KEY_LCONTROL);
 	wormy_config.controls[INPUT_FIRE] = get_config_int("Keys", "fire", KEY_ALT);
+
+#ifdef DINGUX
+	wormy_config.controls[INPUT_DUCK] = get_config_int("Keys", "duck", KEY_LSHIFT);
+	wormy_config.controls[INPUT_MAP] = get_config_int("Keys", "map", KEY_ENTER);
+	wormy_config.controls[INPUT_STATS] = get_config_int("Keys", "stats", KEY_SPACE);
+
+	wormy_config.controls[INPUT_WEAPON_LAST] =
+					get_config_int("Keys", "weapon_last", KEY_TAB);
+	wormy_config.controls[INPUT_WEAPON_NEXT] =
+					get_config_int("Keys", "weapon_next", KEY_BACKSPACE);
+#else
 	wormy_config.controls[INPUT_DUCK] = get_config_int("Keys", "duck", KEY_Z);
 	wormy_config.controls[INPUT_MAP] = get_config_int("Keys", "map", KEY_TAB);
 	wormy_config.controls[INPUT_STATS] = get_config_int("Keys", "stats",
@@ -2862,7 +2878,7 @@ void load_config()
 		get_config_int("SecondaryKeys", "weapon_next", KEY_STOP);
 	wormy_config.secondary_controls[INPUT_CHANGE_AMMO_TYPE] =
 		get_config_int("SecondaryKeys", "change_ammo", KEY_F);
-
+#endif
 	wormy_config.high_scores[0] = get_config_int("HighScore", "highscore0", 10000);
 	wormy_config.high_scores[1] = get_config_int("HighScore", "highscore1", 10000);
 	wormy_config.high_scores[2] = get_config_int("HighScore", "highscore2", 9000);

@@ -179,7 +179,7 @@ int last_weapon()
 
 	do {
 		new_weap--;
-		if (new_weap < 1) new_weap = 12;
+		if (new_weap < 0) new_weap = 12;
 		if (new_weap == player.current_weapon) return 0;
 		switch (new_weap) {
 		case 1:

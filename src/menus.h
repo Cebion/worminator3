@@ -2456,6 +2456,10 @@ void get_highscore_name(int position)
 	char input[16];
 	char done = FALSE;
 
+#ifdef DINGUX
+	show_mouse(NULL);
+#endif
+
 	// Backup the and initialize the buffer
 	blit(swap_buffer, backup, (screen_width / 2) - 64, (screen_height / 2) - 32, 0, 0, 128, 64);
 	blit(worminator_data_file[WORMY_HIGH_SCORE_INPUT_BOX].dat, buffer, 0, 0, 0, 0, 128, 64);

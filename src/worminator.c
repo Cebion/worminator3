@@ -3401,7 +3401,9 @@ void initialize()
 	text_mode(-1);
 
 	// Set up the mouse cursor
+#ifndef DINGUX
 	set_mouse_sprite(worminator_data_file[MOUSE_CURSOR_01].dat);
+#endif
 
 	// Start the weather system with some random values
 	for (weather_loop = 0; weather_loop < 64; weather_loop++) {

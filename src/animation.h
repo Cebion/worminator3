@@ -282,11 +282,13 @@ void update_animations()
 	}
 
 	// Animate the mouse cursor
+#ifndef DINGUX
 	if (global_timer == 0) {
 		mouse_frame++;
 		if (mouse_frame > 7) mouse_frame = 0;
 		set_mouse_sprite(worminator_data_file[MOUSE_CURSOR_01 + mouse_frame].dat);
 	}
+#endif
 
 	// Don't do anything if the game is paused
 	if (game_is_running == FALSE) return;

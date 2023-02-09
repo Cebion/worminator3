@@ -8,8 +8,8 @@ TARGET = worminator
 
 DINGUX = 1
 
-CC = mipsel-linux-gcc
-#CC = gcc
+#CC = mipsel-linux-gcc
+CC = gcc
 
 CFLAGS = -g -O2 -Wall -Wno-deprecated-declarations -Wno-char-subscripts \
 	-Wno-unused-but-set-variable -fsigned-char -DDATADIR=\"./data/\"
